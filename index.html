@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[Your Name] | Accessibility-Focused Product Designer</title>
+  <meta name="description" content="Portfolio of accessibility-focused product design, audits, and remediation work." />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1f2937;
+      --muted: #4b5563;
+      --line: #d1d5db;
+      --accent: #0f766e;
+      --accent-2: #115e59;
+      --card: #f9fafb;
+      --focus: #7c3aed;
+      --max: 960px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-2); }
+    a:focus, button:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 16px;
+      background: #fff;
+      padding: 8px 12px;
+      border: 2px solid var(--accent);
+      z-index: 1000;
+    }
+    .skip-link:focus { top: 16px; }
+
+    header, main, footer { width: min(100% - 32px, var(--max)); margin: 0 auto; }
+    header { padding: 32px 0 16px; }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    nav a {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      text-decoration: none;
+      background: #fff;
+    }
+
+    .hero {
+      padding: 32px 0 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      background: #e6fffb;
+      border: 1px solid #99f6e4;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      color: #115e59;
+      margin-bottom: 16px;
+    }
+
+    section {
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-top: -4px;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+
+    ul { padding-left: 20px; }
+
+    footer {
+      padding: 24px 0 40px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <div class="badge">Accessibility-Focused Product Designer • Web Development Specialist</div>
+    <h1>[Your Name]</h1>
+    <p class="meta">WCAG 2.1 AA • Section 508 • DHS Trusted Tester</p>
+
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#case-studies">Case Studies</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section id="about">
+      <h2>About</h2>
+      <p>
+        I design, audit, and implement accessible digital experiences with a focus on WCAG-compliant solutions and real-world usability.
+        My work spans websites, learning platforms, and accessibility audits, with hands-on experience in testing, remediation, and front-end development.
+      </p>
+    </section>
+
+    <section id="case-studies">
+      <h2>Case Studies</h2>
+
+      <!-- CASE STUDY 1 -->
+      <article class="card">
+        <h3>Accessible Course Catalog and Transportation Finder</h3>
+        <p class="meta">Accessibility rebuild • Mobile-first • Print support</p>
+        <p>
+          Redesigned a course-finding experience for students and parents to improve accessibility, usability, and performance.
+        </p>
+        <ul>
+          <li>Rebuilt with semantic HTML and reduced JavaScript</li>
+          <li>Resolved accessibility issues across contrast, focus, and structure</li>
+          <li>Added print-friendly styles</li>
+        </ul>
+        <p><strong>Outcome:</strong> Improved usability, accessibility, and performance across devices.</p>
+      </article>
+
+      <!-- CASE STUDY 2 -->
+      <article class="card">
+        <h3>Scalable Accessible Curriculum Timeline System</h3>
+        <p class="meta">Data visualization • System design • WCAG compliance</p>
+
+        <p>
+          Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages (by grade level and subject area) to visualize learning progression by quarter and week.
+        </p>
+
+        <h4>Challenges</h4>
+        <ul>
+          <li>Complex curriculum data across 100+ pages</li>
+          <li>CMS constraints and conflicting CSS</li>
+          <li>Need for screen reader and translation support (100+ languages)</li>
+          <li>No existing mobile-friendly solution</li>
+        </ul>
+
+        <h4>Solutions</h4>
+        <ul>
+          <li>Created reusable HTML/CSS pattern for scalability</li>
+          <li>Avoided image-based charts for accessibility</li>
+          <li>Ensured keyboard navigation and accessible links</li>
+          <li>Developed custom mobile CSS transforming charts into lists</li>
+        </ul>
+
+        <h4>Outcome</h4>
+        <p>
+          Delivered a scalable, accessible system used across 100+ pages, improving usability, accessibility, and consistency.
+        </p>
+      </article>
+
+      <!-- CASE STUDY 3 -->
+      <article class="card">
+        <h3>Accessibility Audit & Remediation Guidance (DEL Platform)</h3>
+        <p class="meta">WCAG audit • Developer collaboration • Remediation guidance</p>
+
+        <p>
+          Conducted a comprehensive WCAG 2.2 AA audit of a dynamic web platform, evaluating 55 success criteria and identifying critical accessibility issues.
+        </p>
+
+        <h4>Key Findings</h4>
+        <ul>
+          <li>Missing alt text and incorrect image handling</li>
+          <li>Color contrast and focus indicator issues</li>
+          <li>Layout and reflow problems</li>
+          <li>Unclear link purpose and labeling issues</li>
+          <li>ARIA and semantic HTML inconsistencies</li>
+        </ul>
+
+        <h4>Approach</h4>
+        <ul>
+          <li>DHS Trusted Tester methodology</li>
+          <li>Manual testing with NVDA and keyboard navigation</li>
+          <li>Tools including ANDI and IBM Accessibility Checker</li>
+        </ul>
+
+        <h4>Outcome</h4>
+        <p>
+          Provided detailed remediation guidance and collaborated with developers to improve accessibility and awareness across the platform.
+        </p>
+      </article>
+
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>
+        Email: <a href="mailto:you@example.com">you@example.com</a><br />
+        LinkedIn: <a href="#">Your LinkedIn</a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Built with semantic HTML and accessibility best practices.</p>
+  </footer>
+</body>
+</html>
