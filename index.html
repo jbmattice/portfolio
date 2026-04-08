@@ -161,6 +161,18 @@
       color: var(--text);
       text-decoration: none;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-1px);
     }
 
     .back-to-top:hover {
