@@ -361,17 +361,17 @@ summary:hover {
 </article>
 
       <!-- CASE STUDY 2 -->
-     <article class="card">
+    <article class="card">
   <h3>Scalable Accessible Curriculum Timeline System</h3>
   <p class="meta">Data visualization • System design • WCAG compliance</p>
 
   <p>
-    Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages (by grade level
-    and subject area) to visualize learning progression by quarter and week.
+    Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages by grade level and
+    subject area to visualize learning progression by quarter and week.
   </p>
 
   <p>
-    <strong>Key Insight:</strong> Accessibility and translation needs shape information design just as much as
+    <strong>Key Insight:</strong> Accessibility and translation needs shaped the information design as much as the
     visual presentation.
   </p>
 
@@ -383,30 +383,44 @@ summary:hover {
   <details>
     <summary><strong>Challenges</strong></summary>
     <ul>
-      <li>Complex curriculum data distributed across 100+ pages</li>
-      <li>CMS constraints and conflicting CSS limited available layout options</li>
-      <li>Need to support screen readers, keyboard users, and translation for 100+ languages</li>
-      <li>No existing mobile-friendly solution for the timeline pattern</li>
+      <li>Organizational leadership needed a visual representation of the school year by week and quarter.</li>
+      <li>The source content was provided in a table, but a traditional table would not work because the data required merged and split cells.</li>
+      <li>Image-based solutions would not translate cleanly for families who needed multilingual access.</li>
+      <li>Many attempted solutions did not mesh with the CMS, requiring multiple iterations to find a workable CSS-only approach.</li>
+      <li>Unit lengths varied significantly, from 3-week units to 5-week units, and the design needed to adapt across grade levels and subject areas.</li>
+      <li>The solution had to be manually replicated across 100+ pages, so it needed to be scalable and efficient to maintain.</li>
     </ul>
   </details>
 
   <details>
     <summary><strong>Solutions</strong></summary>
     <ul>
-      <li>Created a reusable HTML/CSS pattern that could scale across grade levels and subjects</li>
-      <li>Avoided image-based charts so content remained accessible and translatable</li>
-      <li>Ensured keyboard access and meaningful link behavior throughout the pattern</li>
-      <li>Built custom mobile CSS that transforms the chart into a structured list on smaller screens</li>
-      <li>Maintained accessible color contrast while preserving brand alignment</li>
+      <li>Rejected image-based approaches so the content would remain accessible and translatable.</li>
+      <li>Avoided traditional tables because split and merged cells would create structural and accessibility problems.</li>
+      <li>Researched and tested CSS-only chart patterns until I found a solution that worked within the CMS.</li>
+      <li>Designed a flexible structure that could support varying unit lengths and differences across subjects and grade levels.</li>
+      <li>Created custom CSS that transformed the timeline into a mobile-friendly bulleted list on smaller screens.</li>
+      <li>Ensured the final pattern remained usable with keyboard navigation and screen readers.</li>
     </ul>
   </details>
 
+  <details>
+    <summary><strong>Tradeoffs &amp; Decisions</strong></summary>
+    <p>
+      I needed a solution that balanced accessibility, translation, and maintainability while working within CMS
+      constraints. I chose a CSS-only pattern because it could scale across 100+ pages, support mobile users, and
+      adapt to changing content structures without introducing unnecessary complexity.
+    </p>
+  </details>
+
   <p>
-    <strong>Outcome:</strong> Delivered a scalable, accessible pattern that improved usability, consistency, and
-    mobile access across a large curriculum content set.
+    <strong>Impact:</strong>
+    Teachers now share these pages with parents at the beginning of the school year during back-to-school night.
+    Instead of relying on high-level PDFs or handouts, parents can see the exact standards taught in each unit by
+    week and by quarter. This gives families a clearer understanding of the curriculum and improves communication
+    between home and school.
   </p>
 </article>
-
 <article class="card">
   <h3>Accessibility Audit &amp; Remediation Guidance</h3>
   <p class="meta">WCAG audit • Developer collaboration • Remediation guidance</p>
