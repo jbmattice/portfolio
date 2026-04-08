@@ -51,7 +51,7 @@ a:hover {
 }
 
 a:focus,
-button:focus {
+button:focus, summary:focus{
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
@@ -222,6 +222,7 @@ footer {
 summary {
   cursor: pointer;
   margin-bottom: 6px;
+  color: var(--accent);
 }
 
 summary:hover {
@@ -314,8 +315,7 @@ summary:hover {
 
   <p>
     <a href="https://isweb.fcps.edu/CTE/" target="_blank" rel="noopener">
-      View live example <span aria-hidden="true">↗</span>
-      <span class="sr-only">(opens in new tab)</span>
+      Academy Transportation Finder <span aria-hidden="true">↗</span> <span class="sr-only">(opens in new tab)</span>
     </a>
   </p>
 
