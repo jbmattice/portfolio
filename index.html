@@ -23,6 +23,7 @@
     body {
       margin: 0;
   font-family: 'Atkinson Hyperlegible', Arial, Helvetica, sans-serif;
+      font: -apple-system-body;
       color: var(--text);
       background: var(--bg);
       line-height: 1.6;  font-size: 1rem; /* = 16px */
@@ -120,6 +121,12 @@
       color: var(--muted);
       font-size: 0.95rem;
     }
+
+    @supports (font: -apple-system-body) and (not (-webkit-touch-callout: default)) {
+  :root {
+    font-size: 100%;
+  }
+}
   </style>
 </head>
 <body>
