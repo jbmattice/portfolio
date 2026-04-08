@@ -215,34 +215,6 @@ footer {
   color: var(--text);
 }
 
-.back-to-top {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 1000;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 96px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--text);
-  text-decoration: none;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.back-to-top.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.back-to-top:hover {
-  transform: translateY(-1px);
-}
 
 @media (max-width: 700px) {
   header,
@@ -260,21 +232,6 @@ footer {
   .card {
     padding: 20px;
   }
-
-  .back-to-top {
-    right: 12px;
-    bottom: 12px;
-  }
-}
-
-@media (max-width: 600px), (max-height: 600px) {
-  .back-to-top {
-    position: static;
-    display: inline-block;
-    margin: 0 0 16px;
-    opacity: 1;
-    pointer-events: auto;
-  }
 }
 
 @media print {
@@ -284,8 +241,7 @@ footer {
   }
 
   nav,
-  .skip-link,
-  .back-to-top {
+  .skip-link, {
     display: none;
   }
 
@@ -516,18 +472,16 @@ footer {
 
   </main>
 
- <a class="back-to-top" href="#main" aria-label="Back to top">^</a>
-
-  <footer>
-    <nav class="footer-nav" aria-label="Footer">
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#case-studies">Case Studies</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <p>Built with semantic HTML and accessibility best practices.</p>
-  </footer>
-
+<footer>
+  <nav class="footer-nav" aria-label="Footer">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#case-studies">Case Studies</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#main">Back to top</a></li>
+    </ul>
+  </nav>
+  <p>Built with semantic HTML and accessibility best practices.</p>
+</footer>
 </body>
 </html>
