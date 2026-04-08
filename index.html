@@ -8,34 +8,54 @@
   <title>Jennifer Mattice | Accessibility-Focused Product Designer</title>
   <meta name="description" content="Portfolio of accessibility-focused product design, audits, and remediation work." />
   <style>
-    :root {
-      --bg: #ffffff;
-      --text: #1f2937;
-      --muted: #4b5563;
-      --line: #7F8C9E;
-      --accent: #2D7D86;
-      --accent-2: #115e59;
-      --card: #f9fafb;
-      --focus: #a89525;
-      --max: 960px;
-    }
+ :root {
+  --bg: #ffffff;
+  --text: #1f2937;
+  --muted: #4b5563;
+  --line: #7f8c9e;
+  --accent: #2d7d86;
+  --accent-2: #115e59;
+  --card: #f9fafb;
+  --focus: #a89525;
+  --max: 960px;
+}
 
-    html { scroll-behavior: smooth;   font-size: 16px; /* standard, accessible base */}
-    body {
-      margin: 0;      
-      font: -apple-system-body;
-  font-family: 'Atkinson Hyperlegible', Arial, Helvetica, sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.6;  font-size: 1rem; /* = 16px */
-    }
-    
-    a { color: var(--accent); }
-    a:hover { color: var(--accent-2); }
-    a:focus, button:focus {
-      outline: 3px solid var(--focus);
-      outline-offset: 3px;
-    }
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font: -apple-system-body;
+  font-family: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+@supports (font: -apple-system-body) and (not (-webkit-touch-callout: default)) {
+  :root {
+    font-size: 100%;
+  }
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--accent-2);
+}
+
+a:focus,
+button:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -47,141 +67,236 @@
   border: 0;
 }
 
-    .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 16px;
-      background: #fff;
-      padding: 8px 12px;
-      border: 2px solid var(--accent);
-      z-index: 1000;
-    }
-    .skip-link:focus { top: 16px; }
-
-    header, main, footer { width: min(100% - 32px, var(--max)); margin: 0 auto; }
-    header { padding: 22px 0 15px; }
-    nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 14px 0 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    nav a {
-      display: inline-block;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      text-decoration: none;
-      background: #fff;
-    }
-
-    .hero {
-      padding: 32px 0 24px;
-      border-top: 1px solid var(--line);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      background: #F7F7F7;
-      border: 1px solid #2D7D86;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      color: #2c7c85;
-      margin-bottom: 16px;
-    }
-
-    section {
-      padding: 20px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .card {
-      background: var(--card);
-      border: 2px solid var(--line);
-      border-radius: 18px;
-      padding: 24px;
-       margin-bottom: 24px;
-    }
-
-    .card h4 {
-  margin-top: 20px;
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  background: #fff;
+  padding: 8px 12px;
+  border: 2px solid var(--accent);
+  z-index: 1000;
 }
 
-.card ul {
+.skip-link:focus {
+  top: 16px;
+}
+
+header,
+main,
+footer {
+  width: min(100% - 32px, var(--max));
+  margin: 0 auto;
+}
+
+header {
+  padding: 24px 0 16px;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+nav a {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  background: #fff;
+  color: var(--text);
+}
+
+.hero {
+  padding: 28px 0 20px;
+  border-top: 2px solid var(--line);
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #f7f7f7;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  color: var(--accent);
   margin-bottom: 16px;
 }
 
-    .meta {
-      color: var(--muted);
-      font-size: 0.96rem;
-      margin-top: -4px;
-    }
+section {
+  padding: 28px 0;
+  border-top: 2px solid var(--line);
+}
 
-    h1, h2, h3 {
-      line-height: 1.2;
-      margin: 0 0 8px;
-    }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--accent);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
 
-    h1 {color: #16365C;}
-    h2 {color: #2D7D86;}
+.card h4 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
 
-    ul { padding-left: 20px; }
+.card p {
+  margin: 0 0 12px;
+}
 
-    footer {
-      padding: 10px 0 15px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
+.card ul {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
 
-     .footer-nav {
-    }
+.card ul li {
+  margin-bottom: 10px;
+}
 
-    .footer-nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+.meta {
+  color: var(--muted);
+  font-size: 0.96rem;
+  margin-top: -4px;
+}
 
-    .footer-nav a {
-      display: inline-block;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      text-decoration: none;
-      background: #fff;
-      color: var(--text);
-    }
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+
+h1 {
+  color: #16365c;
+}
+
+h2 {
+  color: var(--accent);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+footer {
+  padding: 16px 0 24px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  border-top: 2px solid var(--line);
+}
+
+.footer-nav {
+  margin-bottom: 14px;
+}
+
+.footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-nav a {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  background: #fff;
+  color: var(--text);
+}
+
 .back-to-top {
   position: fixed;
   right: 20px;
   bottom: 20px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
-.footer-back-to-top {
-  display: none;
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 700px) {
+  header,
+  main,
+  footer {
+    width: min(100% - 20px, var(--max));
+  }
+
+  nav a,
+  .footer-nav a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .back-to-top {
+    right: 12px;
+    bottom: 12px;
+  }
 }
 
 @media (max-width: 600px), (max-height: 600px) {
   .back-to-top {
+    position: static;
+    display: inline-block;
+    margin: 0 0 16px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media print {
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
+  nav,
+  .skip-link,
+  .back-to-top {
     display: none;
   }
 
-  .footer-back-to-top {
-    display: inline-block;
+  .card {
+    break-inside: avoid;
   }
-}
-    @supports (font: -apple-system-body) and (not (-webkit-touch-callout: default)) {
-  :root {
-    font-size: 100%;
+
+  body {
+    font-size: 11pt;
   }
-}
-  </style>
+}  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
