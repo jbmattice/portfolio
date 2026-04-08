@@ -147,40 +147,25 @@
       background: #fff;
       color: var(--text);
     }
+.back-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
 
-    .back-to-top {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 1000;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 96px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--text);
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
+.footer-back-to-top {
+  display: none;
+}
 
-    .back-to-top.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
+@media (max-width: 600px), (max-height: 600px) {
+  .back-to-top {
+    display: none;
+  }
 
-    .back-to-top:hover {
-      transform: translateY(-1px);
-    }
-
-    .back-to-top:hover {
-      transform: translateY(-1px);
-    }
+  .footer-back-to-top {
+    display: inline-block;
+  }
+}
     @supports (font: -apple-system-body) and (not (-webkit-touch-callout: default)) {
   :root {
     font-size: 100%;
@@ -339,7 +324,7 @@
 
   </main>
 
- <a class="back-to-top" href="#main" aria-label="Back to top">Back to top</a>
+ <a class="back-to-top" href="#main" aria-label="Back to top">^</a>
 
   <footer>
     <nav class="footer-nav" aria-label="Footer">
