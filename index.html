@@ -346,87 +346,102 @@ summary:hover {
 </article>
 
       <!-- CASE STUDY 2 -->
-      <article class="card">
-        <h3>Scalable Accessible Curriculum Timeline System</h3>
-        <p class="meta">Data visualization • System design • WCAG compliance</p>
+     <article class="card">
+  <h3>Scalable Accessible Curriculum Timeline System</h3>
+  <p class="meta">Data visualization • System design • WCAG compliance</p>
 
-        <p>
-          Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages (by grade level and subject area) to visualize learning progression by quarter and week.
-        </p>
+  <p>
+    Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages (by grade level
+    and subject area) to visualize learning progression by quarter and week.
+  </p>
 
-        <h4>Challenges</h4>
-        <ul>
-          <li>Complex curriculum data across 100+ pages</li>
-          <li>CMS constraints and conflicting CSS</li>
-          <li>Need for screen reader and translation support (100+ languages)</li>
-          <li>No existing mobile-friendly solution</li>
-        </ul>
+  <p>
+    <strong>Key Insight:</strong> Accessibility and translation needs shape information design just as much as
+    visual presentation.
+  </p>
 
-        <h4>Solutions</h4>
-        <ul>
-          <li>Created reusable HTML/CSS pattern for scalability</li>
-          <li>Avoided image-based charts for accessibility</li>
-          <li>Ensured keyboard navigation and accessible links</li>
-          <li>Developed custom mobile CSS transforming charts into lists</li>
-        </ul>
+  <p>
+   <a href="https://www.fcps.edu/node/47340" target="_blank" rel="noopener">Grade 5 Science Curriculum<span aria-hidden="true">↗</span>
+    <span class="sr-only">(opens in new tab)</span></a>
+  </p>
 
-        <h4>Outcome</h4>
-        <p>
-          Delivered a scalable, accessible system used across 100+ pages, improving usability, accessibility, and consistency.
-        </p>
-        <h4>Example</h4>
-        <p><a href="https://www.fcps.edu/node/47340" target="_blank" rel="noopener">Grade 5 Science Curriculum<span aria-hidden="true">↗</span>
-    <span class="sr-only">(opens in new tab)</span></a></p>
-      </article>
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Complex curriculum data distributed across 100+ pages</li>
+      <li>CMS constraints and conflicting CSS limited available layout options</li>
+      <li>Need to support screen readers, keyboard users, and translation for 100+ languages</li>
+      <li>No existing mobile-friendly solution for the timeline pattern</li>
+    </ul>
+  </details>
 
-      <!-- CASE STUDY 3 -->
-      <article class="card">
-        <h3>Accessibility Audit and Remediation Guidance</h3>
-        <p class="meta">WCAG audit • Developer collaboration • Remediation guidance</p>
+  <details>
+    <summary><strong>Solutions</strong></summary>
+    <ul>
+      <li>Created a reusable HTML/CSS pattern that could scale across grade levels and subjects</li>
+      <li>Avoided image-based charts so content remained accessible and translatable</li>
+      <li>Ensured keyboard access and meaningful link behavior throughout the pattern</li>
+      <li>Built custom mobile CSS that transforms the chart into a structured list on smaller screens</li>
+      <li>Maintained accessible color contrast while preserving brand alignment</li>
+    </ul>
+  </details>
 
-        <p>
-          Conducted a comprehensive WCAG 2.2 AA audit of a dynamic web platform, evaluating 55 success criteria and identifying critical accessibility issues.
-        </p>
+  <p>
+    <strong>Outcome:</strong> Delivered a scalable, accessible pattern that improved usability, consistency, and
+    mobile access across a large curriculum content set.
+  </p>
+</article>
 
-        <h4>Key Findings</h4>
-        <ul>
-          <li>Missing alt text and incorrect image handling</li>
-          <li>Color contrast and focus indicator issues</li>
-          <li>Layout and reflow problems</li>
-          <li>Unclear link purpose and labeling issues</li>
-          <li>ARIA and semantic HTML inconsistencies</li>
-        </ul>
+<article class="card">
+  <h3>Accessibility Audit &amp; Remediation Guidance (DEL Platform)</h3>
+  <p class="meta">WCAG audit • Developer collaboration • Remediation guidance</p>
 
-        <h4>Approach</h4>
-        <ul>
-          <li>DHS Trusted Tester methodology</li>
-          <li>Manual testing with NVDA and keyboard navigation</li>
-          <li>Tools including ANDI and IBM Accessibility Checker</li>
-        </ul>
+  <p>
+    Conducted a comprehensive WCAG 2.2 AA audit of a dynamic web platform, evaluating 55 success criteria and
+    identifying critical accessibility issues.
+  </p>
 
-        <h4>Outcome</h4>
-        <p>
-          Provided detailed remediation guidance and collaborated with developers to improve accessibility and awareness across the platform.
-        </p>
-        <h4>Sample Audit Findings</h4>
-        <p class="meta">Representative findings from a full WCAG 2.2 AA audit (16 failures identified)</p>
-<ul>
-  <li>
-    <strong>Missing alt text (WCAG 1.1.1):</strong>
-    Images were hidden or lacked meaningful descriptions, limiting access for screen reader users.
-  </li>
-  <li>
-    <strong>Reflow issues (WCAG 1.4.10):</strong>
-    Content required horizontal scrolling at higher zoom levels, reducing usability for low-vision users.
-  </li>
-  <li>
-    <strong>Unclear link purpose (WCAG 2.4.4 and 4.1.2):</strong>
-    Links and controls were inconsistently labeled, creating confusion for both screen reader and sighted users.
-  </li>
-</ul>
-      </article>
+  <p>
+    <strong>Key Insight:</strong> Many accessibility barriers came from structure, labeling, and responsive behavior,
+    not just color contrast or obvious missing text.
+  </p>
 
-      <article class="card">
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Missing or inconsistent alt text for images and functional graphics</li>
+      <li>Reflow and zoom issues causing horizontal scrolling at higher magnification</li>
+      <li>Unclear link purpose and inconsistent labeling across controls</li>
+      <li>ARIA and semantic HTML mismatches affecting screen reader output</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Approach</strong></summary>
+    <ul>
+      <li>Used DHS Trusted Tester methodology to evaluate compliance systematically</li>
+      <li>Tested with NVDA, keyboard navigation, ANDI, and IBM Accessibility Checker</li>
+      <li>Reviewed structure, labels, reading order, and responsive behavior</li>
+      <li>Documented findings and recommendations for the development team</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Sample Findings</strong></summary>
+    <ul>
+      <li><strong>Missing alt text:</strong> Images were hidden or lacked meaningful descriptions.</li>
+      <li><strong>Reflow issues:</strong> Content required horizontal scrolling at higher zoom levels.</li>
+      <li><strong>Unclear link purpose:</strong> Links and controls were inconsistently labeled.</li>
+    </ul>
+  </details>
+
+  <p>
+    <strong>Outcome:</strong> Provided detailed remediation guidance and collaborated with developers to improve
+    accessibility and awareness across the platform.
+  </p>
+</article>
+
+<article class="card">
   <h3>Accessible Document Remediation (PDF/UA Compliance)</h3>
   <p class="meta">PDF/UA • Section 508 • Manual tag tree auditing</p>
 
@@ -435,32 +450,42 @@ summary:hover {
     ensuring it was usable with screen readers and other assistive technologies.
   </p>
 
-  <h4>Challenge</h4>
-  <ul>
-    <li>Complex multi-table layouts with nested structure</li>
-    <li>Correct table header scope and associations</li>
-    <li>Logical reading order across the document</li>
-    <li>Distinguishing meaningful content from decorative artifacts</li>
-  </ul>
-
-  <h4>Approach</h4>
-  <ul>
-    <li>Performed manual tag tree audits to verify document structure</li>
-    <li>Corrected Table Header Scope to support accurate navigation</li>
-    <li>Reviewed and adjusted reading order for screen reader usability</li>
-    <li>Managed artifact tagging for decorative elements</li>
-    <li>Validated the document against Section 508 and PDF/UA standards</li>
-  </ul>
-
-  <h4>Outcome</h4>
   <p>
-    Delivered a remediated document with improved accessibility for screen reader users, more reliable table
-    navigation, and clearer structural relationships for assistive technology.
+    <strong>Key Insight:</strong> Document accessibility depends on structure, reading order, and table semantics,
+    not just visual presentation.
   </p>
-        <h4>Example</h4>
-        <p><a href="https://www.fcps.edu/system/files/forms/2025-06/benchmark_summer_magazine_letter_-_english.pdf" target="_blank" rel="noopener">Benchmark Summer Magazine Letter (PDF)<span aria-hidden="true">↗</span>    <span class="sr-only">(opens in new tab)</span></a></p>
-</article>
 
+  <p>
+    <a href="https://www.fcps.edu/system/files/forms/2025-06/benchmark_summer_magazine_letter_-_english.pdf" target="_blank" rel="noopener">Benchmark Summer Magazine Letter (PDF)<span aria-hidden="true">↗</span> <span class="sr-only">(opens in new tab)</span></a>
+    </a>
+  </p>
+
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Complex multi-table layouts with nested structure</li>
+      <li>Correct table header scope and associations</li>
+      <li>Logical reading order across the document</li>
+      <li>Distinguishing meaningful content from decorative artifacts</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Solutions</strong></summary>
+    <ul>
+      <li>Performed manual tag tree audits to verify document structure</li>
+      <li>Corrected table header scope to support accurate navigation</li>
+      <li>Reviewed and adjusted reading order for screen reader usability</li>
+      <li>Managed artifact tagging for decorative elements</li>
+      <li>Validated the document against Section 508 and PDF/UA standards</li>
+    </ul>
+  </details>
+
+  <p>
+    <strong>Outcome:</strong> Delivered a remediated document with improved accessibility for screen reader users,
+    more reliable table navigation, and clearer structural relationships for assistive technology.
+  </p>
+</article>
     </section>
 
     <section id="contact">
