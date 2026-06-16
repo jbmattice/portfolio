@@ -4,17 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Accessibility Portfolio</title>
-  <meta name="description" content="A portfolio showcasing 4 accessible, highly usable web projects built with inclusive design principles.">
+  <title>Jennifer Mattice | Accessibility Specialist</title>
+  <meta name="description" content="Portfolio of accessibility-focused inclusive design, audits, and remediation work.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================================================
-       1. DESIGN TOKENS & FLUID SYSTEMS (viewports.fyi & Every Layout)
-       ========================================================================== */
+    /* ==1. DESIGN TOKENS & FLUID SYSTEMS (viewports.fyi & Every Layout)  ===== */
     :root {
       /* Typography Stack */
       --font-primary: 'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
@@ -38,9 +36,7 @@
       --color-accent-light: #e6f0fa;
     }
 
-    /* ==========================================================================
-       2. GLOBAL RESET & ACCESSIBILITY DEFAULTS
-       ========================================================================== */
+    /* ==== 2. GLOBAL RESET & ACCESSIBILITY DEFAULTS ======= */
     *, *::before, *::after {
       box-sizing: border-box;
     }
@@ -107,9 +103,7 @@
       outline-offset: 3px;
     }
 
-    /* ==========================================================================
-       3. EVERY LAYOUT PRIMITIVES (Implemented as utility classes)
-       ========================================================================== */
+    /* ====3. EVERY LAYOUT PRIMITIVES (Implemented as utility classes)====== */
     
     /* The Stack: Manages vertical spacing between sibling elements */
     .l-stack > * + * {
@@ -165,9 +159,7 @@
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
     }
 
-    /* ==========================================================================
-       4. COMPONENT STYLING (Semantic Content Blocks)
-       ========================================================================== */
+    /* ==== 4. COMPONENT STYLING (Semantic Content Blocks) ======== */
     .nav-link {
       color: var(--color-dark);
       text-decoration: underline;
@@ -208,7 +200,8 @@
 
   <header class="l-cover">
     <div class="l-center--wide l-cluster l-cluster--space-between" style="width: 100%;">
-      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">[Your Logo/Name]</span>
+      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</span>
+      <p class="meta">WCAG 2.1 AA • Section 508 • DHS Trusted Tester (TT-2612-08123)</p>
       <nav aria-label="Primary Navigation">
         <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
           <li><a href="#projects" class="nav-link">Projects</a></li>
