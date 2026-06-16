@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Accessibility Portfolio</title>
+  <meta name="description" content="A portfolio showcasing 4 accessible, highly usable web projects built with inclusive design principles.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & FLUID SYSTEMS (viewports.fyi & Every Layout)
+       ========================================================================== */
+    :root {
+      /* Typography Stack */
+      --font-primary: 'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
+
+      /* Fluid Typography (clamp based on viewport width) */
+      --step-0: clamp(1.00rem, 0.92rem + 0.38vw, 1.25rem); /* Body text */
+      --step-1: clamp(1.20rem, 1.08rem + 0.60vw, 1.56rem); /* H3 / Card Title */
+      --step-2: clamp(1.44rem, 1.26rem + 0.90vw, 1.95rem); /* H2 / Section Title */
+      --step-3: clamp(1.73rem, 1.46rem + 1.33vw, 2.44rem); /* H1 / Hero Title */
+
+      /* Fluid Spacing Scale (Every Layout modular scale) */
+      --space-s: clamp(0.50rem, 0.46rem + 0.19vw, 0.63rem);
+      --space-m: clamp(1.00rem, 0.92rem + 0.38vw, 1.25rem);
+      --space-l: clamp(2.00rem, 1.85rem + 0.77vw, 2.50rem);
+      --space-xl: clamp(4.00rem, 3.69rem + 1.54vw, 5.00rem);
+
+      /* Accessible Color Palette (High Contrast WCAG AAA targeted) */
+      --color-dark: #121212;
+      --color-light: #fcfcfc;
+      --color-accent: #005a9c; /* Accessible blue against white/light gray */
+      --color-accent-light: #e6f0fa;
+    }
+
+    /* ==========================================================================
+       2. GLOBAL RESET & ACCESSIBILITY DEFAULTS
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      /* Native smooth scrolling for single-page hashes */
+      scroll-behavior: smooth;
+      font-family: var(--font-primary);
+      font-size: 100%; /* Respects user browser font size settings */
+      background-color: var(--color-light);
+      color: var(--color-dark);
+      line-height: 1.6;
+    }
+
+    /* Respect users who prefer reduced motion (Vestibular safety) */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.2;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    h1 { font-size: var(--step-3); }
+    h2 { font-size: var(--step-2); }
+    h3 { font-size: var(--step-1); }
+
+    /* Skip Link for Keyboard Navigation */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: var(--space-m);
+      background: var(--color-accent);
+      color: white;
+      padding: var(--space-s) var(--space-m);
+      z-index: 100;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .skip-link:focus {
+      top: var(--space-m);
+    }
+
+    /* Focus indicators for accessibility */
+    *:focus-visible {
+      outline: 3px solid var(--color-dark);
+      outline-offset: 3px;
+    }
+
+    /* ==========================================================================
+       3. EVERY LAYOUT PRIMITIVES (Implemented as utility classes)
+       ========================================================================== */
+    
+    /* The Stack: Manages vertical spacing between sibling elements */
+    .l-stack > * + * {
+      margin-top: var(--space-stack, var(--space-m));
+    }
+    .l-stack--large > * + * {
+      --space-stack: var(--space-xl);
+    }
+
+    /* The Center: Limits maximum width and centers the content block */
+    .l-center {
+      box-sizing: content-box;
+      max-width: 65ch; /* Optimal line length for reading prose */
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-m);
+      padding-right: var(--space-m);
+    }
+    .l-center--wide {
+      max-width: 80rem; /* Expanded for grid layouts */
+    }
+
+    /* The Cluster: For horizontal groups that wrap naturally (like Navigation) */
+    .l-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-m);
+      align-items: center;
+    }
+    .l-cluster--space-between {
+      justify-content: space-between;
+    }
+
+    /* The Cover: Full viewport heights with top, center, and bottom spaces */
+    .l-cover {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: var(--space-m);
+    }
+    .l-cover > :first-child { margin-bottom: auto; }
+    .l-cover > :last-child { margin-top: auto; }
+    .l-cover > .l-cover-center {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    /* The Grid / Switcher Hybrid: Fluid layout without media queries */
+    .l-grid {
+      display: grid;
+      gap: var(--space-l);
+      /* Grid items automatically adjust or stack when they drop below 25rem */
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
+    }
+
+    /* ==========================================================================
+       4. COMPONENT STYLING (Semantic Content Blocks)
+       ========================================================================== */
+    .nav-link {
+      color: var(--color-dark);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+      font-weight: 700;
+    }
+
+    .nav-link:hover {
+      color: var(--color-accent);
+    }
+
+    .project-card {
+      background: var(--color-accent-light);
+      border-left: 6px solid var(--color-accent);
+      padding: var(--space-l);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: var(--color-accent);
+      color: var(--color-light);
+      padding: var(--space-s) var(--space-m);
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .cta-button:hover {
+      background-color: var(--color-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header class="l-cover">
+    <div class="l-center--wide l-cluster l-cluster--space-between" style="width: 100%;">
+      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">[Your Logo/Name]</span>
+      <nav aria-label="Primary Navigation">
+        <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="l-cover-center l-center l-stack">
+      <h1>Hi, I'm a Front-End Engineer specializing in Accessibility.</h1>
+      <p style="font-size: var(--step-1);">Welcome to my portfolio. Below you will find four case studies demonstrating rigorous adherence to inclusive design standards, semantic structure, and assistive technology compatibility.</p>
+      <div>
+        <a href="#projects" class="cta-button">Explore My Projects</a>
+      </div>
+    </div>
+
+    <div class="l-center" style="text-align: center;">
+      <span aria-hidden="true">↓ Scroll to explore</span>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    
+    <section id="projects" aria-labelledby="projects-heading" style="padding: var(--space-xl) 0;">
+      <div class="l-center--wide l-stack l-stack--large">
+        
+        <div class="l-center" style="text-align: center;">
+          <h2 id="projects-heading">Accessibility Case Studies</h2>
+          <p>Four deep-dives into resolving complex usability barriers.</p>
+        </div>
+
+        <div class="l-grid">
+          
+          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
+            <h3>01. Accessible Data Tables</h3>
+            <p>A deep dive into constructing complex, multi-layered data tables screen-reader users can parse effortlessly via semantic headers and scopes.</p>
+            <a href="#project-detail-1" class="nav-link">Read Case Study <span class="sr-only">on Accessible Data Tables</span></a>
+          </article>
+
+          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
+            <h3>02. Keyboard-Safe Custom Forms</h3>
+            <p>Rebuilding dynamic form validation controls completely without ARIA-hacks, utilizing native browser validation and error announcements.</p>
+            <a href="#project-detail-2" class="nav-link">Read Case Study <span class="sr-only">on Keyboard-Safe Custom Forms</span></a>
+          </article>
+
+          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
+            <h3>03. Focus Management in Modals</h3>
+            <p>An exploration into trapping, saving, and properly shifting keyboard focus inside multi-step modal layers without losing document context.</p>
+            <a href="#project-detail-3" class="nav-link">Read Case Study <span class="sr-only">on Focus Management in Modals</span></a>
+          </article>
+
+          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
+            <h3>04. Audio-Described Video Player</h3>
+            <p>Creating custom semantic controls for web media layouts that cleanly synchronize secondary text tracks for low-vision user descriptions.</p>
+            <a href="#project-detail-4" class="nav-link">Read Case Study <span class="sr-only">on Audio-Described Video Player</span></a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <hr style="border: 0; border-top: 1px solid var(--color-dark); opacity: 0.2; margin: 0;">
+
+    <section id="about" aria-labelledby="about-heading" style="padding: var(--space-xl) 0;">
+      <div class="l-center l-stack">
+        <h2 id="about-heading">About My Practice</h2>
+        <p>I believe digital experiences should leave no one behind. By matching modern CSS methodologies like fluid design tokens with strict, uncompromised HTML semantics, I engineer web products that are exceptionally lightweight and natively supportive of all assistive devices.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="background: var(--color-dark); color: var(--color-light); padding: var(--space-l) 0;">
+    <div class="l-center--wide l-cluster l-cluster--space-between">
+      <p>&copy; 2026 Accessibility Portfolio. Built natively with HTML and CSS.</p>
+      <p><a href="#main-content" style="color: var(--color-light);">Back to top</a></p>
+    </div>
+  </footer>
+
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+</body>
+</html>
