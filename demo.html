@@ -103,9 +103,9 @@
       outline-offset: 3px;
     }
 
-    /* ====3. EVERY LAYOUT PRIMITIVES (Implemented as utility classes)====== */
-    
-    /* The Stack: Manages vertical spacing between sibling elements */
+    /* ==========================================================================
+       3. EVERY LAYOUT PRIMITIVES
+       ========================================================================== */
     .l-stack > * + * {
       margin-top: var(--space-stack, var(--space-m));
     }
@@ -113,89 +113,137 @@
       --space-stack: var(--space-xl);
     }
 
-    /* The Center: Limits maximum width and centers the content block */
     .l-center {
       box-sizing: content-box;
-      max-width: 65ch; /* Optimal line length for reading prose */
+      max-width: 65ch;
       margin-left: auto;
       margin-right: auto;
       padding-left: var(--space-m);
       padding-right: var(--space-m);
     }
     .l-center--wide {
-      max-width: 80rem; /* Expanded for grid layouts */
+      max-width: 85rem;
     }
 
-    /* The Cluster: For horizontal groups that wrap naturally (like Navigation) */
     .l-cluster {
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-m);
       align-items: center;
     }
-    .l-cluster--space-between {
-      justify-content: space-between;
-    }
+    .l-cluster--space-between { justify-content: space-between; }
 
-    /* The Cover: Full viewport heights with top, center, and bottom spaces */
-    .l-cover {
+    /* The Sidebar Primitive (Modified for Master-Detail Canvas) */
+    .l-sidebar {
       display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      padding: var(--space-m);
-    }
-    .l-cover > :first-child { margin-bottom: auto; }
-    .l-cover > :last-child { margin-top: auto; }
-    .l-cover > .l-cover-center {
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-
-    /* The Grid / Switcher Hybrid: Fluid layout without media queries */
-    .l-grid {
-      display: grid;
+      flex-wrap: wrap;
       gap: var(--space-l);
-      /* Grid items automatically adjust or stack when they drop below 25rem */
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
     }
 
-    /* ==== 4. COMPONENT STYLING (Semantic Content Blocks) ======== */
-    .nav-link {
-      color: var(--color-dark);
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 4px;
+    /* ==========================================================================
+       4. MASTER-DETAIL ACCORDION ARCHITECTURE (Pure CSS)
+       ========================================================================== */
+    
+    /* The container surrounding all four case studies */
+    .master-detail-container {
+      width: 100%;
+    }
+
+    /* Individual case study items */
+    .case-study-item {
+      border: 2px solid var(--color-muted-border);
+      border-radius: 6px;
+      margin-bottom: var(--space-s);
+      background: var(--color-light);
+    }
+
+    /* The Master Trigger (Accordion Header) */
+    .case-study-trigger {
+      display: block;
+      padding: var(--space-m);
+      font-size: var(--step-1);
       font-weight: 700;
+      cursor: pointer;
+      background: var(--color-accent-light);
+      list-style: none; /* Hide default browser arrow */
+    }
+    /* Webkit arrow hiding fallback */
+    .case-study-trigger::-webkit-details-marker {
+      display: none;
     }
 
-    .nav-link:hover {
-      color: var(--color-accent);
-    }
-
-    .project-card {
-      background-color: #FFFAFA;
-      border-left: 6px solid var(--color-accent);
-      border-top: 2px solid var(--color-light);
-      border-right: 2px solid var(--color-light);
-      border-bottom: 2px solid var(--color-light);
-      padding: var(--space-l);
-      border-radius: 0 8px 8px 0;
-    }
-
-    .cta-button {
-      display: inline-block;
-      background-color: var(--color-accent);
+    .case-study-trigger:hover {
+      background: var(--color-accent);
       color: var(--color-light);
-      padding: var(--space-s) var(--space-m);
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 4px;
     }
 
-    .cta-button:hover {
-      background-color: var(--color-dark);
+    /* Visual indicator for expanded state */
+    .case-study-item[open] .case-study-trigger {
+      background: var(--color-accent);
+      color: var(--color-light);
+      border-bottom: 2px solid var(--color-dark);
     }
-        .sr-only {
+
+    /* The Detail Panel Content Area */
+    .case-study-content {
+      padding: var(--space-l);
+      border-top: 1px solid var(--color-muted-border);
+    }
+
+    /* DESKTOP ENHANCEMENT: Transform stack into dynamic Master-Detail layout */
+    @media (min-width: 55rem) {
+      .master-detail-container {
+        display: grid;
+        /* Left Column (Master List): 20rem wide | Right Column (Detail View): Rest of space */
+        grid-template-columns: 22rem 1fr;
+        gap: var(--space-xl);
+        position: relative;
+        align-items: start;
+      }
+
+      /* Make the Master column link group stick to screen while scrolling details */
+      .master-column {
+        position: sticky;
+        top: var(--space-m);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-s);
+      }
+
+      /* Break the default nested HTML rendering behavior */
+      .case-study-item {
+        display: content; /* Structural layout bypass */
+        border: none;
+        background: transparent;
+      }
+
+      /* Force the triggers into a dedicated, clean left-side button stack */
+      .case-study-trigger {
+        grid-column: 1;
+        border: 2px solid var(--color-muted-border);
+        border-radius: 6px;
+        transition: none; /* Instant shift */
+      }
+
+      .case-study-item[open] .case-study-trigger {
+        border-color: var(--color-dark);
+        box-shadow: 4px 4px 0px var(--color-dark);
+      }
+
+      /* Force the expanded content panels into the wide right column */
+      .case-study-content {
+        grid-column: 2;
+        grid-row: 1 / span 5; /* Spans the visual height of the master list */
+        border: 2px solid var(--color-dark);
+        background: var(--color-light);
+        border-radius: 8px;
+        padding: var(--space-xl);
+        box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    /* Screen Reader Helper */
+    .sr-only {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -206,106 +254,6 @@
       white-space: nowrap;
       border: 0;
     }
-
-    /* ==========================================================================
-   MASTER-DETAIL ACCORDION ARCHITECTURE (Pure CSS)
-   ========================================================================== */
-
-/* The container surrounding the layout */
-.master-detail-container {
-  width: 100%;
-}
-
-/* Individual case study wrapper blocks */
-.case-study-item {
-  border: 2px solid var(--color-muted-border, #ccc);
-  border-radius: 6px;
-  margin-bottom: var(--space-s, 0.63rem);
-  background: var(--color-light, #fcfcfc);
-}
-
-/* The Master Trigger (Accordion Header Button) */
-.case-study-trigger {
-  display: block;
-  padding: var(--space-m, 1.25rem);
-  font-size: var(--step-1, 1.25rem);
-  font-weight: 700;
-  cursor: pointer;
-  background: var(--color-accent-light, #e6f0fa);
-  list-style: none; /* Removes default summary arrow */
-}
-
-/* Webkit browser fallback to hide default arrow */
-.case-study-trigger::-webkit-details-marker {
-  display: none;
-}
-
-.case-study-trigger:hover {
-  background: var(--color-accent, #005a9c);
-  color: var(--color-light, #fcfcfc);
-}
-
-/* Visual state when a project case study is actively selected */
-.case-study-item[open] .case-study-trigger {
-  background: var(--color-accent, #005a9c);
-  color: var(--color-light, #fcfcfc);
-}
-
-/* The Detail Panel Content Block */
-.case-study-content {
-  padding: var(--space-l, 2.5rem);
-  border-top: 1px solid var(--color-muted-border, #ccc);
-}
-
-/* DESKTOP ENHANCEMENT: Transforms the linear stack into a side-by-side layout */
-@media (min-width: 55rem) {
-  .master-detail-container {
-    display: grid;
-    /* Fixed 22rem width directory on left, fluid details panel on right */
-    grid-template-columns: 22rem 1fr;
-    gap: var(--space-xl, 5rem);
-    position: relative;
-    align-items: start;
-  }
-
-  /* Holds and locks the directory buttons to the viewport during long scrolls */
-  .master-column {
-    position: sticky;
-    top: var(--space-m, 1.25rem);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-s, 0.63rem);
-  }
-
-  /* Forces sub-elements to bypass their container box and align directly to the grid */
-  .case-study-item {
-    display: contents; 
-  }
-
-  /* Anchors the menu triggers directly into the left column stack */
-  .case-study-trigger {
-    grid-column: 1;
-    border: 2px solid var(--color-muted-border, #ccc);
-    border-radius: 6px;
-  }
-
-  .case-study-item[open] .case-study-trigger {
-    border-color: var(--color-dark, #121212);
-    box-shadow: 4px 4px 0px var(--color-dark, #121212);
-  }
-
-  /* Anchors all expanded contents directly into the wide right canvas column */
-  .case-study-content {
-    grid-column: 2;
-    grid-row: 1 / span 5; /* Forces right panel to start at the top of the grid block */
-    border: 2px solid var(--color-dark, #121212);
-    background: var(--color-light, #fcfcfc);
-    border-radius: 8px;
-    padding: var(--space-xl, 5rem);
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.05);
-  }
-}
-    
   </style>
 </head>
 <body>
