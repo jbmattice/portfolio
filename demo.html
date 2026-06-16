@@ -195,6 +195,18 @@
     .cta-button:hover {
       background-color: var(--color-dark);
     }
+        .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
   </style>
 </head>
 <body>
@@ -203,8 +215,8 @@
 
   <header class="l-cover">
     <div class="l-center--wide l-cluster l-cluster--space-between" style="width: 100%;">
-      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</span>
-      <p class="meta">WCAG 2.1 AA • Section 508 • DHS Trusted Tester (TT-2612-08123)</p>
+      <h1 style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</h1>
+      <p class="meta">WCAG 2.2 AA • Section 508 • DHS Trusted Tester (TT-2612-08123)</p>
       <nav aria-label="Primary Navigation">
         <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
           <li><a href="#projects" class="nav-link">Projects</a></li>
@@ -214,7 +226,7 @@
     </div>
 
     <div class="l-cover-center l-center l-stack">
-      <p>Hi, Welcome to my Digital Accessibility Portfolio.</p>
+      <p style="font-size: var(--step-1);">Hi, Welcome to my Digital Accessibility Portfolio.</p>
       <div>
         <a href="#projects" class="cta-button">Explore My Projects</a>
       </div>
@@ -224,7 +236,7 @@
 
     <section id="about" aria-labelledby="about-heading" style="padding: var(--space-xl) 0;">
       <div class="l-center l-stack">
-        <h2 id="about-heading">About My Practice</h2>
+        <h2 id="about-heading">About</h2>
         <p>I design, audit, and implement accessible digital experiences with a focus on WCAG-compliant solutions and real-world usability. My work spans websites, learning platforms, and accessibility audits, with hands-on experience in testing, remediation, and front-end development.</p>
       </div>
     </section>
@@ -241,8 +253,8 @@
       <div class="l-center--wide l-stack l-stack--large">
         
         <div class="l-center" style="text-align: center;">
-          <h2 id="projects-heading">Accessibility Case Studies</h2>
-          <p>Four deep-dives into resolving complex usability barriers.</p>
+          <h2 id="projects-heading"> Case Studies</h2>
+          <p>The following case studies demonstrate accessibility-focused design, auditing, and remediation across web, systems, and document-based experiences.</p>
         </div>
 
         <div class="l-grid">
@@ -284,20 +296,6 @@
       <p><a href="#main-content" style="color: var(--color-light);">Back to top</a></p>
     </div>
   </footer>
-
-  <style>
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
 
 </body>
 </html>
