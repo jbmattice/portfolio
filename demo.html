@@ -206,6 +206,105 @@
       white-space: nowrap;
       border: 0;
     }
+
+    /* ==========================================================================
+   MASTER-DETAIL ACCORDION ARCHITECTURE (Pure CSS)
+   ========================================================================== */
+
+/* The container surrounding the layout */
+.master-detail-container {
+  width: 100%;
+}
+
+/* Individual case study wrapper blocks */
+.case-study-item {
+  border: 2px solid var(--color-muted-border, #ccc);
+  border-radius: 6px;
+  margin-bottom: var(--space-s, 0.63rem);
+  background: var(--color-light, #fcfcfc);
+}
+
+/* The Master Trigger (Accordion Header Button) */
+.case-study-trigger {
+  display: block;
+  padding: var(--space-m, 1.25rem);
+  font-size: var(--step-1, 1.25rem);
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--color-accent-light, #e6f0fa);
+  list-style: none; /* Removes default summary arrow */
+}
+
+/* Webkit browser fallback to hide default arrow */
+.case-study-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.case-study-trigger:hover {
+  background: var(--color-accent, #005a9c);
+  color: var(--color-light, #fcfcfc);
+}
+
+/* Visual state when a project case study is actively selected */
+.case-study-item[open] .case-study-trigger {
+  background: var(--color-accent, #005a9c);
+  color: var(--color-light, #fcfcfc);
+}
+
+/* The Detail Panel Content Block */
+.case-study-content {
+  padding: var(--space-l, 2.5rem);
+  border-top: 1px solid var(--color-muted-border, #ccc);
+}
+
+/* DESKTOP ENHANCEMENT: Transforms the linear stack into a side-by-side layout */
+@media (min-width: 55rem) {
+  .master-detail-container {
+    display: grid;
+    /* Fixed 22rem width directory on left, fluid details panel on right */
+    grid-template-columns: 22rem 1fr;
+    gap: var(--space-xl, 5rem);
+    position: relative;
+    align-items: start;
+  }
+
+  /* Holds and locks the directory buttons to the viewport during long scrolls */
+  .master-column {
+    position: sticky;
+    top: var(--space-m, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s, 0.63rem);
+  }
+
+  /* Forces sub-elements to bypass their container box and align directly to the grid */
+  .case-study-item {
+    display: contents; 
+  }
+
+  /* Anchors the menu triggers directly into the left column stack */
+  .case-study-trigger {
+    grid-column: 1;
+    border: 2px solid var(--color-muted-border, #ccc);
+    border-radius: 6px;
+  }
+
+  .case-study-item[open] .case-study-trigger {
+    border-color: var(--color-dark, #121212);
+    box-shadow: 4px 4px 0px var(--color-dark, #121212);
+  }
+
+  /* Anchors all expanded contents directly into the wide right canvas column */
+  .case-study-content {
+    grid-column: 2;
+    grid-row: 1 / span 5; /* Forces right panel to start at the top of the grid block */
+    border: 2px solid var(--color-dark, #121212);
+    background: var(--color-light, #fcfcfc);
+    border-radius: 8px;
+    padding: var(--space-xl, 5rem);
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.05);
+  }
+}
     
   </style>
 </head>
@@ -241,54 +340,82 @@
       </div>
     </section>
 
-
-    <div class="l-center" style="text-align: center;">
-      <span aria-hidden="true">↓ Scroll to explore</span>
-    </div>
-  </header>
-
-  <main id="main-content" tabindex="-1">
-    
-    <section id="projects" aria-labelledby="projects-heading" style="padding: var(--space-xl) 0;">
+ <section id="projects" aria-labelledby="projects-heading" style="padding: var(--space-xl) 0;">
       <div class="l-center--wide l-stack l-stack--large">
         
         <div class="l-center" style="text-align: center;">
           <h2 id="projects-heading"> Case Studies</h2>
           <p>The following case studies demonstrate accessibility-focused design, auditing, and remediation across web, systems, and document-based experiences.</p>
         </div>
-
-        <div class="l-grid">
-          
-          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
-            <h3>01. Accessible Data Tables</h3>
-            <p>A deep dive into constructing complex, multi-layered data tables screen-reader users can parse effortlessly via semantic headers and scopes.</p>
-            <a href="#project-detail-1" class="nav-link">Read Case Study <span class="sr-only">on Accessible Data Tables</span></a>
-          </article>
-
-          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
-            <h3>02. Keyboard-Safe Custom Forms</h3>
-            <p>Rebuilding dynamic form validation controls completely without ARIA-hacks, utilizing native browser validation and error announcements.</p>
-            <a href="#project-detail-2" class="nav-link">Read Case Study <span class="sr-only">on Keyboard-Safe Custom Forms</span></a>
-          </article>
-
-          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
-            <h3>03. Focus Management in Modals</h3>
-            <p>An exploration into trapping, saving, and properly shifting keyboard focus inside multi-step modal layers without losing document context.</p>
-            <a href="#project-detail-3" class="nav-link">Read Case Study <span class="sr-only">on Focus Management in Modals</span></a>
-          </article>
-
-          <article class="project-card l-stack" style="--space-stack: var(--space-m);">
-            <h3>04. Audio-Described Video Player</h3>
-            <p>Creating custom semantic controls for web media layouts that cleanly synchronize secondary text tracks for low-vision user descriptions.</p>
-            <a href="#project-detail-4" class="nav-link">Read Case Study <span class="sr-only">on Audio-Described Video Player</span></a>
-          </article>
-
-        </div>
       </div>
-    </section>
+ </section>
+  </header>
 
-   
-  </main>
+ <main id="main-content" tabindex="-1" style="padding: var(--space-xl) 0;">
+  <div class="l-center--wide">
+    
+    <div class="master-detail-container">
+      
+      <div class="master-column">
+        
+        <details class="case-study-item" name="portfolio-projects" open>
+          <summary class="case-study-trigger">
+            01. Accessible Data Tables
+          </summary>
+          <div class="case-study-content l-stack">
+            <h2>Case Study: Accessible Data Tables</h2>
+            <p class="project-meta" style="color: var(--color-accent); font-weight: bold;">WCAG Success Criteria: 1.3.1 Info and Relationships (Level A)</p>
+            <hr style="border: 0; border-top: 1px solid var(--color-muted-border); margin: var(--space-m) 0;">
+            <p>This project resolves reading order errors within dense data panels. Without accurate markup associations, blind or low-vision users lose context when traversing complex multi-layered data arrays.</p>
+            <h3>Engineering Strategy</h3>
+            <p>We implemented exact <code>id</code> mapping structures paired with explicit <code>headers</code> attributes, allowing nested rows to accurately declare data relationships on every user arrow focus change.</p>
+          </div>
+        </details>
+
+        <details class="case-study-item" name="portfolio-projects">
+          <summary class="case-study-trigger">
+            02. Keyboard-Safe Custom Forms
+          </summary>
+          <div class="case-study-content l-stack">
+            <h2>Case Study: Keyboard-Safe Custom Forms</h2>
+            <p class="project-meta" style="color: var(--color-accent); font-weight: bold;">WCAG Success Criteria: 2.1.1 Keyboard (Level A), 3.3.1 Error Identification</p>
+            <hr style="border: 0; border-top: 1px solid var(--color-muted-border); margin: var(--space-m) 0;">
+            <p>Custom input elements frequently overwrite default browser focus hooks, completely breaking the interface loop for non-mouse navigators who interact via switches or keyboards.</p>
+            <h3>Engineering Strategy</h3>
+            <p>This framework utilizes structural native HTML constraints and connects error handling layers dynamically using the <code>aria-describedby</code> attributes for real-time status feedback updates.</p>
+          </div>
+        </details>
+
+        <details class="case-study-item" name="portfolio-projects">
+          <summary class="case-study-trigger">
+            03. Focus Management in Modals
+          </summary>
+          <div class="case-study-content l-stack">
+            <h2>Case Study: Focus Management in Modals</h2>
+            <p class="project-meta" style="color: var(--color-accent); font-weight: bold;">WCAG Success Criteria: 2.4.3 Focus Order (Level A)</p>
+            <hr style="border: 0; border-top: 1px solid var(--color-muted-border); margin: var(--space-m) 0;">
+            <p>Poorly structured modal workflows let the user's keyboard cursor escape into background elements, trapping interactive focus out of view and confusing assistive software screen readers.</p>
+            <h3>Engineering Strategy</h3>
+            <p>Built completely with semantic CSS transitions, this design isolates active content components by restoring and placing the active focus outline back onto original triggering nodes automatically upon container removal.</p>
+          </div>
+        </details>
+
+        <details class="case-study-item" name="portfolio-projects">
+          <summary class="case-study-trigger">
+            04. Audio-Described Video Player
+          </summary>
+          <div class="case-study-content l-stack">
+            <h2>Case Study: Audio-Described Video Player</h2>
+            <p class="project-meta" style="color: var(--color-accent); font-weight: bold;">WCAG Success Criteria: 1.2.3 Audio Description or Media Alternative (Level A)</p>
+            <hr style="border: 0; border-top: 1px solid var(--color-muted-border); margin: var(--space-m) 0;">
+            <p>Standard media setups created without native landmarks are fully unreadable by search tools and alternative reading device software.</p>
+            <h3>Engineering Strategy</h3>
+            <p>We engineered control buttons utilizing standard native HTML components wrapped with specific layout descriptors, anchoring descriptions alongside primary voice overlays cleanly across all viewport dimensions.</p>
+          </div>
+        </details>
+
+      </div> </div> </div>
+</main>
 
   <footer style="background: var(--color-dark); color: var(--color-light); padding: var(--space-l) 0;">
     <div class="l-center--wide l-cluster l-cluster--space-between">
