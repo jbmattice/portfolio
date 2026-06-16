@@ -31,7 +31,7 @@
 
       /* Accessible Color Palette (High Contrast WCAG AAA targeted) */
       --color-dark: #2d7d86;
-      --color-light: #fcfcfc;
+      --color-light: #E5E5E5;
       --color-accent: #16365c;
       --color-accent-light: #4b5563;
     }
@@ -46,7 +46,7 @@
       scroll-behavior: smooth;
       font-family: var(--font-primary);
       font-size: 100%; /* Respects user browser font size settings */
-      background-color: white;
+      background-color: #FDFFFF;
       color: var(--color-dark);
       line-height: 1.6;
     }
@@ -173,8 +173,10 @@
     }
 
     .project-card {
-      background: var(--color-accent-light);
       border-left: 6px solid var(--color-accent);
+      border-top: 1px solid var(--color-light);
+      border-left: 1px solid var(--color-light);
+      border-bottom: 1px solid var(--color-light);
       padding: var(--space-l);
       border-radius: 0 8px 8px 0;
     }
