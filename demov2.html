@@ -89,10 +89,10 @@
     
     /* The Stack: Absolute control over vertical rhythm */
     .l-stack > * + * {
-      margin-top: var(--space-stack, var(--space-m));
+      margin-top: var(--space-stack, var(--space-s));
     }
     .l-stack--large > * + * {
-      --space-stack: var(--space-xl);
+      --space-stack: var(--space-l);
     }
 
     /* The Center: Centers content blocks and sets optimal horizontal line length */
@@ -112,7 +112,7 @@
     .l-cluster {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-m);
+      gap: var(--space-s);
       align-items: center;
     }
     .l-cluster--space-between { justify-content: space-between; }
@@ -127,7 +127,7 @@
       /* Enforce hardware-accelerated horizontal snapping */
       scroll-snap-type: x mandatory;
       scrollbar-color: var(--color-dark) var(--color-accent-light);
-      padding-bottom: var(--space-m);
+      padding-bottom: var(--space-s);
     }
 
     /* Custom Webkit scrollbar styling for visual polishing */
@@ -163,9 +163,9 @@
       background: var(--color-light);
       border: 3px solid var(--color-dark);
       border-radius: 8px;
-      padding: var(--space-l);
+      padding: var(--space-m);
       box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
-      margin-right: var(--space-l); /* Gap spacing along the scroll row */
+      margin-right: var(--space-m); /* Gap spacing along the scroll row */
     }
 
     .project-card h3 {
@@ -179,7 +179,7 @@
       color: var(--color-accent);
       font-weight: bold;
       font-size: 0.9rem;
-      padding: var(--space-s) var(--space-m);
+      padding: var(--space-s) var(--space-s);
       border-radius: 4px;
     }
   </style>
@@ -190,7 +190,7 @@
 
   <header style="padding: var(--space-m) 0; border-bottom: 1px solid var(--color-muted-border);">
     <div class="l-center--wide l-cluster l-cluster--space-between">
-      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">[Your Logo]</span>
+      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</span>
       <nav aria-label="Primary Navigation">
         <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
           <li><a href="#projects-section" style="color: var(--color-dark); font-weight: bold;">Case Studies</a></li>
@@ -220,17 +220,19 @@
         
         <div class="l-center">
           <h2 id="projects-heading">Case Studies</h2>
-          <p style="margin-bottom: var(--space-m);">Swipe horizontally or use your keyboard arrow tracking keys to explore my engineering layouts.</p>
+          <p>The following case studies demonstrate accessibility-focused design, auditing, and remediation across web, systems, and document-based experiences.</p>
+          <p style="margin-bottom: var(--space-s);">Swipe horizontally or use your keyboard arrow tracking keys to explore my engineering layouts.</p>
         </div>
 
         <div class="l-center--wide">
           <div class="l-reel">
             
             <article class="project-card l-stack">
-              <span class="meta-tag">WCAG 1.3.1 - Info and Relationships</span>
-              <h3>01. Accessible Data Tables</h3>
-              <p>This project tackles reading order and semantic comprehension bugs found in deeply complex dataset layout arrays. Without explicit header routing paths, low-vision navigation completely breaks.</p>
-              <h4>Engineering Solution</h4>
+              <span class="meta-tag">Accessibility rebuild • Mobile-first • Section 508 / WCAG 2.1 AA</span>
+              <h3>Accessible Course Catalog and Transportation Finder</h3>
+              <p>Modernized and optimized legacy content into a mobile-responsive, 508-compliant platform. The work focused on making course and transportation information usable for students and parents across devices and assistive technologies.</p>
+              <p><strong>Key Insight:</strong> Accessibility issues often stem from structural constraints inside the system, not just visual design choices.</p>
+              <h4>Challenges</h4>
               <p>We structured clean database outputs using exact <code>id</code> mapping configurations tethered explicitly to structural cell headers, establishing consistent structural announcements during user keyboard traversing.</p>
             </article>
 
