@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
   <style>
     /* ==========================================================================
        1. DESIGN TOKENS & FLUID SYSTEMS (viewports.fyi & Every Layout)
@@ -182,6 +182,31 @@
       padding: var(--space-s) var(--space-s);
       border-radius: 4px;
     }
+        .cta-button {
+      display: inline-block;
+      background-color: var(--color-accent);
+      color: var(--color-light);
+      padding: var(--space-s) var(--space-m);
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .cta-button:hover {
+      background-color: var(--color-dark);
+    }
+
+     .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -232,8 +257,43 @@
               <h3>Accessible Course Catalog and Transportation Finder</h3>
               <p>Modernized and optimized legacy content into a mobile-responsive, 508-compliant platform. The work focused on making course and transportation information usable for students and parents across devices and assistive technologies.</p>
               <p><strong>Key Insight:</strong> Accessibility issues often stem from structural constraints inside the system, not just visual design choices.</p>
-              <h4>Challenges</h4>
-              <p>We structured clean database outputs using exact <code>id</code> mapping configurations tethered explicitly to structural cell headers, establishing consistent structural announcements during user keyboard traversing.</p>
+              <a href="https://isweb.fcps.edu/CTE/" class="cta-button" target="_blank" rel="noopener">Academy Transportation Finder <span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a>
+              <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Legacy content was not designed for accessibility and required substantial restructuring</li>
+      <li>A mandatory CMS shell introduced layout and styling constraints that limited direct fixes</li>
+      <li>Known accessibility defects existed in the underlying structure and brand styling</li>
+      <li>The experience needed to work reliably on mobile, desktop, and with assistive technologies</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Solutions</strong></summary>
+    <ul>
+      <li>Re-architected the content using semantic HTML to improve structure and assistive technology support</li>
+      <li>Engineered custom HTML5/CSS3 workarounds to compensate for shell-level accessibility defects</li>
+      <li>Remediated layout, navigation, contrast, focus, zoom, and reflow issues</li>
+      <li>Added print support with a dedicated print stylesheet for users who needed hard copies</li>
+      <li>Made incremental improvements over a three-month period while working within existing constraints</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Tradeoffs and Decisions</strong></summary>
+    <p>
+      I could not change the CMS shell or brand styling directly, so I prioritized accessibility first and then
+      improved usability with targeted enhancements such as print functionality and CSS refinements. If I had access
+      to the shell CSS, I would have resolved more issues at the source; instead, I focused on the highest-impact
+      changes that could be delivered safely within the existing system.
+    </p>
+  </details>
+
+  <p>
+    <strong>Impact:</strong> Students and parents now have full access to the information using screen readers,
+    keyboard navigation, and zoom up to 400%. The experience is also more usable on mobile and desktop, with
+    clearer structure, better performance, and improved print output.
+  </p>
             </article>
 
             <article class="project-card l-stack">
