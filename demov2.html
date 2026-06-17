@@ -49,7 +49,7 @@
       font-family: var(--font-primary);
       font-size: 100%;
       background-color: #FDFFFF;
-      color: var(--color-dark);
+      color: var(--color-accent);
       line-height: 1.6;
     }
 
@@ -59,9 +59,9 @@
     }
 
     h1, h2, h3 { line-height: 1.2; font-weight: 700; margin: 0; }
-    h1 { font-size: var(--step-3); }
-    h2 { font-size: var(--step-2); }
-    h3 { font-size: var(--step-1); }
+    h1 { font-size: var(--step-3); color: var(--color-accent);}
+    h2 { font-size: var(--step-2); color: var(--color-dark);}
+    h3 { font-size: var(--step-1); color: var(--color-dark);}
 
     /* Focus indicators for keyboard navigation safety */
     *:focus-visible {
@@ -75,7 +75,7 @@
       left: var(--space-m);
       background: var(--color-accent);
       color: white;
-      padding: var(--space-s) var(--space-m);
+      padding: var(--space-s) var(--space-s);
       z-index: 100;
       text-decoration: none;
       font-weight: bold;
@@ -92,7 +92,7 @@
       margin-top: var(--space-stack, var(--space-s));
     }
     .l-stack--large > * + * {
-      --space-stack: var(--space-l);
+      --space-stack: var(--space-m);
     }
 
     /* The Center: Centers content blocks and sets optimal horizontal line length */
@@ -101,8 +101,7 @@
       max-width: 65ch; /* ~65 characters per line prevents reading fatigue */
       margin-left: auto;
       margin-right: auto;
-      padding-left: var(--space-m);
-      padding-right: var(--space-m);
+      padding: var(--space-s) var(--space-l);
     }
     .l-center--wide {
       max-width: 85rem;
@@ -153,7 +152,7 @@
     /* Spacer fix to prevent standard flex-overflow layout clipping on final elements */
     .l-reel::after {
       content: '';
-      flex: 0 0 var(--space-m);
+      flex: 0 0 var(--space-s);
     }
 
     /* ==========================================================================
@@ -163,7 +162,7 @@
       background: var(--color-light);
       border: 3px solid var(--color-dark);
       border-radius: 8px;
-      padding: var(--space-m);
+      padding: var(--space-s);
       box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
       margin-right: var(--space-m); /* Gap spacing along the scroll row */
     }
@@ -186,7 +185,7 @@
       display: inline-block;
       background-color: var(--color-accent);
       color: var(--color-light);
-      padding: var(--space-s) var(--space-m);
+      padding: var(--space-s) var(--space-s);
       text-decoration: none;
       font-weight: bold;
       border-radius: 4px;
@@ -215,7 +214,7 @@
 
   <header style="padding: var(--space-m) 0; border-bottom: 1px solid var(--color-muted-border);">
     <div class="l-center--wide l-cluster l-cluster--space-between">
-      <span aria-hidden="true" style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</span>
+      <h1 style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</h1>
       <nav aria-label="Primary Navigation">
         <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
           <li><a href="#projects-section" style="color: var(--color-dark); font-weight: bold;">Case Studies</a></li>
@@ -225,7 +224,7 @@
     </div>
   </header>
 
-  <main id="main-content" class="l-stack l-stack--large" tabindex="-1" style="padding: var(--space-m) 0;">
+  <main id="main-content" class="l-stack l-stack--large" tabindex="-1" style="padding: var(--space-s) 0;">
     
     <section id="welcome-section" aria-label="Introduction" class="l-center">
       <div class="l-stack">
