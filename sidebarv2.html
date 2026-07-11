@@ -133,14 +133,14 @@
 /* Column Decorators */
 .l-sidebar > :first-child {
   /* Clean bottom divider for mobile, switches to right divider on desktop */
-  border-bottom: 2px solid var(--color-dark);
+  border-bottom: none;
   padding-bottom: var(--space-s);
 }
 
 @media (min-width: 48rem) {
   .l-sidebar > :first-child {
     border-bottom: none;
-    border-right: 2px solid var(--color-accent-light);
+    border-right: 2px solid var(--color-dark);
     padding-bottom: 0;
     padding-right: var(--space-m);
   }
