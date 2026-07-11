@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Jennifer Mattice | Accessibility Portfolio</title>
+  <title>Jennifer Mattice | Digital Accessibility Portfolio</title>
   <meta name="description" content="Portfolio of accessibility-focused product design, audits, and remediation work.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -231,7 +231,7 @@
 </section>
   <header style="padding: var(--space-m) 0; border-bottom: 1px solid var(--color-muted-border);">
     <div class="l-center l-cluster l-cluster--space-between">
-      <h1 style="font-weight: bold; font-size: var(--step-1);">Jennifer Mattice</h1>
+      <h1 style="font-weight: bold; font-size: var(--step-1);">Digital Accessibility Portfolio</h1>
       <nav aria-label="Primary Navigation">
         <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
           <li><a href="#projects-section" style="color: var(--color-dark); font-weight: bold;">Case Studies</a></li>
@@ -241,13 +241,7 @@
     </div>
   </header>
 
-  <main id="main-content" class="l-stack l-stack--large" tabindex="-1" style="padding: var(--space-s) 0;">
-    
-    <section id="welcome-section" aria-label="Introduction" class="l-center">
-      <div class="l-stack">
-        <p style="font-size: var(--step-1);">Welcome to my Digital Accessibility Portfolio!</p>
-      </div>
-    </section>
+  <main id="main-content" class="l-stack l-stack" tabindex="-1" style="padding: var(--space-s) 0;">
 
     <section id="about-section" aria-labelledby="about-heading" class="l-center">
       <div class="l-stack">
@@ -272,7 +266,7 @@
           <div class="tab-list-wrapper">
             <div role="tablist" aria-label="Case Studies Portfolio">
               <button id="tab-catalog" role="tab" aria-selected="true" aria-controls="panel-catalog" class="tab-trigger">01. Course Catalog</button>
-              <button id="tab-forms" role="tab" aria-selected="false" aria-controls="panel-forms" class="tab-trigger" tabindex="-1">02. Dynamic Forms</button>
+              <button id="tab-curriculum" role="tab" aria-selected="false" aria-controls="panel-curriculum" class="tab-trigger" tabindex="-1">02. Curriculum Timeline</button>
               <button id="tab-modals" role="tab" aria-selected="false" aria-controls="panel-modals" class="tab-trigger" tabindex="-1">03. Trapping Modals</button>
               <button id="tab-media" role="tab" aria-selected="false" aria-controls="panel-media" class="tab-trigger" tabindex="-1">04. Media Suite</button>
             </div>
@@ -282,8 +276,8 @@
           <div>
             
             <article id="panel-catalog" role="tabpanel" aria-labelledby="tab-catalog" class="project-card l-stack">
-              <span class="meta-tag">Accessibility rebuild • Mobile-first • Section 508 / WCAG 2.1 AA</span>
               <h3>Accessible Course Catalog and Transportation Finder</h3>
+              <span class="meta-tag">Accessibility rebuild • Mobile-first • Section 508 / WCAG 2.1 AA</span>
               <p>Modernized and optimized legacy content into a mobile-responsive, 508-compliant platform. The work focused on making course and transportation information usable for students and parents across devices and assistive technologies.</p>
               <p><strong>Key Insight:</strong> Accessibility issues often stem from structural constraints inside the system, not just visual design choices.</p>
               <div>
@@ -329,14 +323,59 @@
             </article>
 
             <article id="panel-forms" role="tabpanel" aria-labelledby="tab-forms" class="project-card l-stack" hidden>
-              <span class="meta-tag">WCAG 2.1.1 - Keyboard Navigation</span>
-              <h3>02. Keyboard-Safe Dynamic Forms</h3>
-              <p>Custom input components regularly dismantle native web focus rings, isolating switch control and keyboard navigators completely from real-time form validation metrics.</p>
-              <h4>Engineering Solution</h4>
-              <p>This project eliminates script-dependent validations by reinforcing standard native HTML interactive patterns and linking dynamic screen messages with active <code>aria-describedby</code> targets.</p>
-            </article>
+              <h3>Scalable Accessible Curriculum Timeline System</h3>
+              <span class="meta-tag">Data visualization • System design • WCAG compliance</span>
+              <p>Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages by grade level and subject area to visualize learning progression by quarter and week.</p>
+               <p>
+    <strong>Key Insight:</strong> Accessibility and translation needs shaped the information design as much as the visual presentation.
+  </p>
 
-            <article id="panel-modals" role="tabpanel" aria-labelledby="tab-modals" class="project-card l-stack" hidden>
+  <p>
+   <a href="https://www.fcps.edu/node/47287" target="_blank" rel="noopener">Grade 5 Math Curriculum<span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span>
+    <span class="sr-only">(opens in new tab)</span></a>
+  </p>
+
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Organizational leadership needed a visual representation of the school year by week and quarter.</li>
+      <li>The source content was provided in a table, but a traditional table would not work because the data required merged and split cells.</li>
+      <li>Image-based solutions would not translate cleanly for families who needed multilingual access.</li>
+      <li>Many attempted solutions did not mesh with the CMS, requiring multiple iterations to find a workable CSS-only approach.</li>
+      <li>Unit lengths varied significantly, from 3-week units to 5-week units, and the design needed to adapt across grade levels and subject areas.</li>
+      <li>The solution had to be manually replicated across 100+ pages, so it needed to be scalable and efficient to maintain.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Solutions</strong></summary>
+    <ul>
+      <li>Rejected image-based approaches so the content would remain accessible and translatable.</li>
+      <li>Avoided traditional tables because split and merged cells would create structural and accessibility problems.</li>
+      <li>Researched and tested CSS-only chart patterns until I found a solution that worked within the CMS.</li>
+      <li>Designed a flexible structure that could support varying unit lengths and differences across subjects and grade levels.</li>
+      <li>Created custom CSS that transformed the timeline into a mobile-friendly bulleted list on smaller screens.</li>
+      <li>Ensured the final pattern remained usable with keyboard navigation and screen readers.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Tradeoffs and Decisions</strong></summary>
+    <p>
+      I needed a solution that balanced accessibility, translation, and maintainability while working within CMS
+      constraints. I chose a CSS-only pattern because it could scale across 100+ pages, support mobile users, and
+      adapt to changing content structures without introducing unnecessary complexity.
+    </p>
+  </details>
+
+  <p>
+    <strong>Impact:</strong>
+    Teachers now share these pages with parents at the beginning of the school year during back-to-school night.
+    Instead of relying on high-level PDFs or handouts, parents can see the exact standards taught in each unit by
+    week and by quarter. This gives families a clearer understanding of the curriculum and improves communication
+    between home and school.
+  </p>
+            <article id="panel-curriculum" role="tabpanel" aria-labelledby="tab-curriculum" class="project-card l-stack" hidden>
               <span class="meta-tag">WCAG 2.4.3 - Document Focus Order</span>
               <h3>03. Focus Layer Trapping Modals</h3>
               <p>Poorly contained structural components let background web layers absorb active focus routines, causing screen-readers to read invisible data nodes beneath visual elements.</p>
