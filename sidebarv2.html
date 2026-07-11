@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Jennifer Mattice | Digital Accessibility Portfolio</title>
-  <meta name="description" content="Portfolio of accessibility-focused product design, audits, and remediation work.">
+  <meta name="description" content="Portfolio of digital accessibility-focused product design, audits, and remediation work.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://gstatic.com" crossorigin>
@@ -109,61 +109,91 @@
     }
     .l-cluster--space-between { justify-content: space-between; }
 
-/* --- THE SIDEBAR PRIMITIVE (ZOOM & REFLOW OPTIMIZED) --- */
-.l-sidebar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-s);
+/* ==========================================================================
+   THE SIDEBAR BUTTON/TAB CLEANUP (Applies at 100% and Desktop)
+   ========================================================================== */
+
+.tab-trigger {
+  /* 1. Reset all ugly browser button defaults */
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.05rem;
+  font-family: inherit;
+  color: var(--color-dark);
+  
+  /* 2. Setup clean spacing and the vertical indicator bar for desktop */
+  display: block;
+  width: 100%;
+  padding: var(--space-s) var(--space-m);
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
 }
 
-/* Column 1: The Left Sidebar Menu Tracker */
-.l-sidebar > :first-child {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 12rem;
-  border-right: 3px solid var(--color-dark);
-  padding-right: var(--space-s);
+/* Hover state for desktop tabs */
+.tab-trigger:hover {
+  background-color: var(--color-accent-light);
 }
 
-/* Column 2: The Right Main Content Panel Card Blocks */
-.l-sidebar > :last-child {
-  flex-grow: 1;
-  flex-basis: 0;
-  /* Ensure content cannot expand beyond its container boundaries */
-  min-width: 0; 
+/* Active/Selected tab state on desktop */
+.tab-trigger[aria-selected="true"] {
+  font-weight: bold;
+  border-left: 3px solid var(--color-dark);
+  background-color: transparent;
 }
 
-/* 
-  RAISED BREAKPOINT (62rem / ~992px)
-  Safely triggers a vertical stack on mobile screens AND on desktops zoomed to 400%
-*/
+/* Keyboard focus safety wrapper */
+.tab-trigger:focus-visible {
+  outline: 3px solid var(--color-dark);
+  outline-offset: -3px;
+}
+
+
+/* ==========================================================================
+   MOBILE & 400% ZOOM BREAKPOINT (62rem / ~992px)
+   ========================================================================== */
 @media (max-width: 62rem) {
   .l-sidebar {
-    flex-direction: column; /* Forces clean top-to-bottom reading order */
+    flex-direction: column;
     gap: var(--space-m);
   }
 
+  /* Turn the sidebar menu container into a horizontal row wrapper */
   .l-sidebar > :first-child {
     border-right: none;
     border-bottom: 2px solid var(--color-accent-light);
     padding-right: 0;
-    padding-bottom: var(--space-s);
-    flex-basis: 100%; /* Spans the full width of the zoomed viewport */
+    padding-bottom: var(--space-xs);
+    flex-basis: 100%;
+    
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
   }
   
-  /* Reset tab trigger button borders for the horizontal mobile layout */
+  /* Pivot the buttons to horizontal navigation elements */
   .tab-trigger {
-    border-left: none;
-    border-bottom: 3px solid transparent;
-    padding-left: 0;
     display: inline-block;
     width: auto;
-    margin-right: var(--space-s);
+    border-left: none; /* Strip vertical bar */
+    border-bottom: 3px solid transparent; /* Prepare horizontal bar */
+    padding: var(--space-xs) var(--space-s);
   }
   
+  /* Active state for horizontal layout */
   .tab-trigger[aria-selected="true"] {
     border-left: none;
     border-bottom: 3px solid var(--color-dark);
+  }
+}
+
+/* Keep high-contrast rules pristine */
+@media (forced-colors: active) {
+  .tab-trigger[aria-selected="true"] {
+    outline: 2px solid ButtonText;
   }
 }
 
