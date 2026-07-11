@@ -105,22 +105,38 @@
     }
     .l-cluster--space-between { justify-content: space-between; }
 
-    /* --- THE SIDEBAR PRIMITIVE --- */
+    /* --- THE SIDEBAR PRIMITIVE (UPDATED FOOTPRINT) --- */
     .l-sidebar {
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-s);
     }
 
+    /* Column 1: The narrow sidebar list tracker */
     .l-sidebar > :first-child {
-      flex-grow: 1;
-      flex-basis: 15rem;
+      flex-grow: 0;             /* Prevents stretching out across the negative width space */
+      flex-shrink: 0;
+      flex-basis: 12rem;        /* Tight localized horizontal containment footprint */
+      border-right: 2px solid var(--color-accent-light);
+      padding-right: var(--space-s);
     }
 
+    /* Column 2: The dominant component panel content display card blocks */
     .l-sidebar > :last-child {
-      flex-grow: 999;
+      flex-grow: 1;             /* Shifts layout focus to dynamically absorb all remaining content space */
       flex-basis: 0;
-      min-width: 50%;
+      min-width: calc(60% - var(--space-l)); /* Responsive wrap boundary threshold safely calculated */
+    }
+
+    /* Fallback adjustment when layout breaks and items wrap below each other vertically */
+    @media (max-width: 38rem) {
+      .l-sidebar > :first-child {
+        border-right: none;
+        border-bottom: 2px solid var(--color-accent-light);
+        padding-right: 0;
+        padding-bottom: var(--space-s);
+        flex-basis: 100%;
+      }
     }
 
     /* ==========================================================================
@@ -128,7 +144,7 @@
        ========================================================================== */
     .tab-list-wrapper {
       position: sticky;
-      top: var(--space-s);
+      top: var(--space-m);
     }
 
     .tab-list-wrapper [role="tablist"] {
@@ -137,41 +153,39 @@
       gap: var(--space-s);
     }
 
-    /* Unstyling standard button properties for semantic safety */
     .tab-trigger {
       display: block;
       width: 100%;
       text-align: left;
       background: none;
       border: none;
-      border-bottom: 1px solid var(--color-accent-light);
       color: var(--color-dark);
       font-family: inherit;
       font-size: inherit;
       font-weight: bold;
       padding: var(--space-s) 0;
       cursor: pointer;
+      border-left: 3px solid transparent;
+      padding-left: var(--space-s);
     }
 
     .tab-trigger:hover {
       color: var(--color-accent);
     }
 
-    /* Target chosen elements gracefully using native attribute bindings */
     .tab-trigger[aria-selected="true"] {
       color: var(--color-accent);
-      border-bottom: 3px solid var(--color-dark);
+      border-left: 3px solid var(--color-dark);
+      background-color: var(--color-accent-light);
     }
 
-    /* Hidden attribute helper for programmatic state toggles */
     [hidden] {
       display: none !important;
     }
 
     .project-card {
       background: var(--color-light);
-      border-left: 4px solid var(--color-dark);
-      padding: var(--space-s) 0 var(--space-s) var(--space-m);
+      padding: 0 0 0 var(--space-s);
     }
 
     .meta-tag {
@@ -251,7 +265,7 @@
           <p>Use your keyboard arrow keys to navigate between case study tabs.</p>
         </div>
 
-        <!-- THE SIDEBAR PRIMITIVE ARRANGEMENT (TABS ARCHEETYPE) -->
+        <!-- THE SIDEBAR PRIMITIVE ARRANGEMENT (TIGHTER PROPORTIONS) -->
         <div class="l-sidebar">
           
           <!-- Column 1: The Sidebar Tablist -->
