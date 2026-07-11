@@ -109,79 +109,63 @@
     }
     .l-cluster--space-between { justify-content: space-between; }
 
-    /* --- THE SIDEBAR PRIMITIVE (UPDATED FOOTPRINT) --- */
-    .l-sidebar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-s);
-    }
+/* --- THE SIDEBAR PRIMITIVE (ZOOM & REFLOW OPTIMIZED) --- */
+.l-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
 
-    /* Column 1: The narrow sidebar list tracker */
-    .l-sidebar > :first-child {
-      flex-grow: 0;             /* Prevents stretching out across the negative width space */
-      flex-shrink: 0;
-      flex-basis: 12rem;        /* Tight localized horizontal containment footprint */
-      border-right: 3px solid var(--color-dark);
-      padding-right: var(--space-s);
-    }
+/* Column 1: The Left Sidebar Menu Tracker */
+.l-sidebar > :first-child {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 12rem;
+  border-right: 3px solid var(--color-dark);
+  padding-right: var(--space-s);
+}
 
-    /* Column 2: The dominant component panel content display card blocks */
-    .l-sidebar > :last-child {
-      flex-grow: 1;             /* Shifts layout focus to dynamically absorb all remaining content space */
-      flex-basis: 0;
-      min-width: calc(60% - var(--space-l)); /* Responsive wrap boundary threshold safely calculated */
-    }
+/* Column 2: The Right Main Content Panel Card Blocks */
+.l-sidebar > :last-child {
+  flex-grow: 1;
+  flex-basis: 0;
+  /* Ensure content cannot expand beyond its container boundaries */
+  min-width: 0; 
+}
 
-    /* Fallback adjustment when layout breaks and items wrap below each other vertically */
-    @media (max-width: 38rem) {
-      .l-sidebar > :first-child {
-        border-right: none;
-        border-bottom: 2px solid var(--color-dark);
-        padding-right: 0;
-        padding-bottom: var(--space-s);
-        flex-basis: 100%;
-      }
-    }
+/* 
+  RAISED BREAKPOINT (62rem / ~992px)
+  Safely triggers a vertical stack on mobile screens AND on desktops zoomed to 400%
+*/
+@media (max-width: 62rem) {
+  .l-sidebar {
+    flex-direction: column; /* Forces clean top-to-bottom reading order */
+    gap: var(--space-m);
+  }
 
-    /* ==========================================================================
-       4. COMPONENT STYLING (ARIA TABS INTERFACE)
-       ========================================================================== */
-    .tab-list-wrapper {
-      position: sticky;
-      top: var(--space-m);
-    }
-
-    .tab-list-wrapper [role="tablist"] {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-s);
-    }
-
-    .tab-trigger {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background: none;
-      border: none;
-      color: var(--color-dark);
-      font-family: inherit;
-      font-size: inherit;
-      font-weight: bold;
-      padding: var(--space-s) 0;
-      cursor: pointer;
-      border-left: 3px solid transparent;
-      padding-left: var(--space-s);
-    }
-
-    .tab-trigger:hover {
-      color: var(--color-accent);
-    }
-
-    .tab-trigger[aria-selected="true"] {
-      color: var(--color-accent);
-      border-left: 3px solid var(--color-dark);
-      background-color: var(--color-accent-light);
-    }
+  .l-sidebar > :first-child {
+    border-right: none;
+    border-bottom: 2px solid var(--color-accent-light);
+    padding-right: 0;
+    padding-bottom: var(--space-s);
+    flex-basis: 100%; /* Spans the full width of the zoomed viewport */
+  }
+  
+  /* Reset tab trigger button borders for the horizontal mobile layout */
+  .tab-trigger {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding-left: 0;
+    display: inline-block;
+    width: auto;
+    margin-right: var(--space-s);
+  }
+  
+  .tab-trigger[aria-selected="true"] {
+    border-left: none;
+    border-bottom: 3px solid var(--color-dark);
+  }
+}
 
     [hidden] {
       display: none !important;
