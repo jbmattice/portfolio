@@ -253,6 +253,22 @@
     outline: 2px solid ButtonText;
     outline-offset: -2px; /* Pulls it inside slightly to maintain clean spacing */
   }
+
+      /* Force outlines on CTA buttons and active tabs (from previous step) */
+  .btn, a[role="button"], .cta-button { outline: 2px solid ButtonText; }
+  .tab-trigger[aria-selected="true"] { outline: 2px solid ButtonText; outline-offset: -2px; }
+
+  /* 4. Fix Footer Links: Ensure all anchor links in the footer display underlines */
+  footer a {
+    text-decoration: underline;
+  }
+
+  /* Provide a system highlight color change when hovering/focusing footer links */
+  footer a:hover,
+  footer a:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
 }
   </style>
 </head>
