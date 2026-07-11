@@ -425,48 +425,36 @@
             </article>
 
             <article id="panel-media" role="tabpanel" aria-labelledby="tab-media" class="project-card l-stack" hidden>
-              <h3>Document Remediation</h3>
-              <span class="meta-tag">PDF/UA • Section 508 • Manual tag tree auditing</span>
+              <h3>High-Volume K-6 Educational Workbook Remediation</h3>
+              <span class="meta-tag">PDF Remediation • Public Sector • WCAG 2.2 AA and PDF/UA</span>
               <p>
-    Remediated a complex, multi-table PDF document to meet Section 508 and PDF/UA accessibility standards,
-    ensuring it was usable with screen readers and other assistive technologies.
+    Led the accessibility architecture and remediation strategy for a massive suite of public summer curriculum workbooks spanning grades K-6. The benchmark project focused on a highly visual, 54-page 2nd Grade Language Arts workbook containing irregular multi-column layouts, tables, and vendor-provided assets.
   </p>
 
-  <p>
-    <strong>Key Insight:</strong> Document accessibility depends on structure, reading order, and table semantics,
-    not just visual presentation.
-  </p>
+  <h4>The Process</h4>
+<p>Established a multi-stage production pipeline: content teams initiated layouts in Google Docs, utilized Grackle Docs for initial structural analysis, and exported to PDF. I then performed deep-level manual remediation in Adobe Acrobat Pro—rigorously walking the Tag Tree and verifying the Reading Order panel—before validating compliance using the PAC (PDF Accessibility Checker) engine.</p>
 
-  <p>
-    <a class="cta-button" href="https://www.fcps.edu/system/files/forms/2025-06/benchmark_summer_magazine_letter_-_english.pdf" target="_blank" rel="noopener">Benchmark Summer Magazine Letter <i class="ph ph-file-pdf" aria-label="PDF" role="img"></i><span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a>
-    </a>
-  </p>
+<details>
+  <summary><strong>Challenges</strong></summary>
+  <ul>
+    <li><strong>Non-Interactive AT Navigation:</strong> The document is designed to be printed rather than filled out digitally, yet it still had to remain fully navigable and coherent for students utilizing Assistive Technology (AT) without form fields. Very little documentation exists for this specific engineering requirement.</li>
+    <li><strong>Inaccessible Third-Party Vendor Assets:</strong> Embedded handwriting tracing pages featured a black line example followed by low-contrast grey lines for tracing. The vendor-supplied grey lines failed contrast requirements, creating a systemic barrier that could not be modified at the source.</li>
+    <li><strong>Velocity and Scale:</strong> Manually remediating tag structures, establishing reading flows, and fixing reading orders across 50 to 60+ pages per packet presents an immense time and resource bottleneck.</li>
+  </ul>
+</details>
 
-  <details>
-    <summary><strong>Challenges</strong></summary>
-    <ul>
-      <li>Complex multi-table layouts with nested structure</li>
-      <li>Correct table header scope and associations</li>
-      <li>Logical reading order across the document</li>
-      <li>Distinguishing meaningful content from decorative artifacts</li>
-    </ul>
-  </details>
+<details>
+  <summary><strong>Solutions and Technical Tradeoffs</strong></summary>
+  <ul>
+    <li><strong>Custom Static Tagging Structures:</strong> Engineered a predictable, linear keyboard reading order without relying on interactive form controls. Visual placeholders and text indicators were meticulously mapped to structural paragraph tags (<code>&lt;P&gt;</code>) and list elements to guide AT users through tasks meant for print.</li>
+    <li><strong>Vendor Risk Management:</strong> Documented the vendor-driven contrast failures as an institutional compliance exception. Compensated by rewriting explicit descriptive alt-text and layout instructions to ensure the *intent* of the handwriting exercises was communicated clearly via screen readers.</li>
+    <li><strong>Pipeline Automation:</strong> Created a reusable tagging template playbook for the curriculum staff, shifting accessibility upstream into Google Docs to radically reduce manual clean-up time in Acrobat.</li>
+  </ul>
+</details>
 
-  <details>
-    <summary><strong>Solutions</strong></summary>
-    <ul>
-      <li>Performed manual tag tree audits to verify document structure</li>
-      <li>Corrected table header scope to support accurate navigation</li>
-      <li>Reviewed and adjusted reading order for screen reader usability</li>
-      <li>Managed artifact tagging for decorative elements</li>
-      <li>Validated the document against Section 508 and PDF/UA standards</li>
-    </ul>
-  </details>
-
-  <p>
-    <strong>Outcome:</strong> Delivered a remediated document with improved accessibility for screen reader users,
-    more reliable table navigation, and clearer structural relationships for assistive technology.
-  </p>
+<p>
+  <strong>Impact:</strong> Established a scalable roadmap for the remaining K-6 packets, ensuring thousands of families have baseline summer learning access. The 2nd-grade benchmark artifact successfully passes automated PAC verification while preserving print fidelity.
+</p>
             </article>
 
           </div>
