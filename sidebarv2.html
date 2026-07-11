@@ -110,11 +110,46 @@
     .l-cluster--space-between { justify-content: space-between; }
 
 /* ==========================================================================
-   THE SIDEBAR BUTTON/TAB CLEANUP (Applies at 100% and Desktop)
+   THE BULLETPROOF SIDEBAR GRID ENGINE
    ========================================================================== */
 
+/* 1. Base Mobile / High-Zoom Layout: Single Column Stacked */
+.l-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+/* 2. Desktop Layout: Only switches to side-by-side if there is room */
+@media (min-width: 48rem) {
+  .l-sidebar {
+    display: grid;
+    /* Column 1 is locked to exactly 13rem. Column 2 takes up the rest of the page */
+    grid-template-columns: 13rem 1fr; 
+    gap: var(--space-m);
+  }
+}
+
+/* Column Decorators */
+.l-sidebar > :first-child {
+  /* Clean bottom divider for mobile, switches to right divider on desktop */
+  border-bottom: 2px solid var(--color-dark);
+  padding-bottom: var(--space-s);
+}
+
+@media (min-width: 48rem) {
+  .l-sidebar > :first-child {
+    border-bottom: none;
+    border-right: 2px solid var(--color-accent-light);
+    padding-bottom: 0;
+    padding-right: var(--space-m);
+  }
+}
+
+/* ==========================================================================
+   CLEAN TYPOGRAPHY TAB TRIGGERS
+   ========================================================================== */
 .tab-trigger {
-  /* 1. Reset all ugly browser button defaults */
   background: transparent;
   border: none;
   border-radius: 0;
@@ -125,71 +160,56 @@
   font-family: inherit;
   color: var(--color-dark);
   
-  /* 2. Setup clean spacing and the vertical indicator bar for desktop */
-  display: block;
-  width: 100%;
-  padding: var(--space-s) var(--space-m);
-  border-left: 3px solid transparent;
+  /* Horizontal arrangement on mobile/zoom */
+  display: inline-block;
+  width: auto;
+  padding: var(--space-xs) var(--space-s);
+  border-bottom: 3px solid transparent;
   transition: all 0.2s ease;
 }
 
-/* Hover state for desktop tabs */
+/* Desktop orientation changes for the buttons */
+@media (min-width: 48rem) {
+  .tab-trigger {
+    display: block;
+    width: 100%;
+    padding: var(--space-s) var(--space-m);
+    border-bottom: none;
+    border-left: 3px solid transparent; /* Indicators on the left side */
+  }
+}
+
+/* Hover effect */
 .tab-trigger:hover {
   background-color: var(--color-accent-light);
 }
 
-/* Active/Selected tab state on desktop */
+/* Active Selected Tab - Mobile (Bottom border) */
 .tab-trigger[aria-selected="true"] {
   font-weight: bold;
-  border-left: 3px solid var(--color-dark);
-  background-color: transparent;
+  border-bottom: 3px solid var(--color-dark);
 }
 
-/* Keyboard focus safety wrapper */
+/* Active Selected Tab - Desktop (Left border override) */
+@media (min-width: 48rem) {
+  .tab-trigger[aria-selected="true"] {
+    border-bottom: none;
+    border-left: 3px solid var(--color-dark);
+  }
+}
+
+/* Focus indicator safety */
 .tab-trigger:focus-visible {
   outline: 3px solid var(--color-dark);
   outline-offset: -3px;
 }
 
-
-/* ==========================================================================
-   MOBILE & 400% ZOOM BREAKPOINT (62rem / ~992px)
-   ========================================================================== */
-@media (max-width: 48rem) {
-  .l-sidebar {
-    flex-direction: column;
-    gap: var(--space-m);
-  }
-
-  /* Turn the sidebar menu container into a horizontal row wrapper */
-  .l-sidebar > :first-child {
-    border-right: none;
-    border-bottom: 2px solid var(--color-accent-light);
-    padding-right: 0;
-    padding-bottom: var(--space-xs);
-    flex-basis: 100%;
-    
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-  }
-  
-  /* Pivot the buttons to horizontal navigation elements */
-  .tab-trigger {
-    display: inline-block;
-    width: auto;
-    border-left: none; /* Strip vertical bar */
-    border-bottom: 3px solid transparent; /* Prepare horizontal bar */
-    padding: var(--space-xs) var(--space-s);
-  }
-  
-  /* Active state for horizontal layout */
+/* High Contrast mode rules */
+@media (forced-colors: active) {
   .tab-trigger[aria-selected="true"] {
-    border-left: none;
-    border-bottom: 3px solid var(--color-dark);
+    outline: 2px solid ButtonText;
   }
 }
-
 /* Keep high-contrast rules pristine */
 @media (forced-colors: active) {
   .tab-trigger[aria-selected="true"] {
