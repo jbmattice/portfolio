@@ -267,8 +267,8 @@
             <div role="tablist" aria-label="Case Studies Portfolio">
               <button id="tab-catalog" role="tab" aria-selected="true" aria-controls="panel-catalog" class="tab-trigger">01. Course Catalog</button>
               <button id="tab-curriculum" role="tab" aria-selected="false" aria-controls="panel-curriculum" class="tab-trigger" tabindex="-1">02. Curriculum Timeline</button>
-              <button id="tab-audit" role="tab" aria-selected="false" aria-controls="panel-audit" class="tab-trigger" tabindex="-1">03. WCAG audit</button>
-              <button id="tab-media" role="tab" aria-selected="false" aria-controls="panel-media" class="tab-trigger" tabindex="-1">04. Media Suite</button>
+              <button id="tab-audit" role="tab" aria-selected="false" aria-controls="panel-audit" class="tab-trigger" tabindex="-1">03. WCAG Audit</button>
+              <button id="tab-media" role="tab" aria-selected="false" aria-controls="panel-media" class="tab-trigger" tabindex="-1">04. PDF/UA</button>
             </div>
           </div>
 
@@ -425,11 +425,48 @@
             </article>
 
             <article id="panel-media" role="tabpanel" aria-labelledby="tab-media" class="project-card l-stack" hidden>
-              <span class="meta-tag">WCAG 1.2.3 - Alternative Media Management</span>
-              <h3>04. Audio-Described Media Suite</h3>
-              <p>Standard audio/video media components engineered without explicit assistive landmarks remain fully unreadable by reading engines and text-to-speech tools.</p>
-              <h4>Engineering Solution</h4>
-              <p>We constructed custom presentation controls out of native HTML element blocks, coordinating distinct spoken audio description layers that sync securely across fluid layout dimensions.</p>
+              <h3>Document Remediation</h3>
+              <span class="meta-tag">PDF/UA • Section 508 • Manual tag tree auditing</span>
+              <p>
+    Remediated a complex, multi-table PDF document to meet Section 508 and PDF/UA accessibility standards,
+    ensuring it was usable with screen readers and other assistive technologies.
+  </p>
+
+  <p>
+    <strong>Key Insight:</strong> Document accessibility depends on structure, reading order, and table semantics,
+    not just visual presentation.
+  </p>
+
+  <p>
+    <a class="cta-button" href="https://www.fcps.edu/system/files/forms/2025-06/benchmark_summer_magazine_letter_-_english.pdf" target="_blank" rel="noopener">Benchmark Summer Magazine Letter <i class="ph ph-file-pdf" aria-label="PDF" role="img"></i><span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a>
+    </a>
+  </p>
+
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Complex multi-table layouts with nested structure</li>
+      <li>Correct table header scope and associations</li>
+      <li>Logical reading order across the document</li>
+      <li>Distinguishing meaningful content from decorative artifacts</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Solutions</strong></summary>
+    <ul>
+      <li>Performed manual tag tree audits to verify document structure</li>
+      <li>Corrected table header scope to support accurate navigation</li>
+      <li>Reviewed and adjusted reading order for screen reader usability</li>
+      <li>Managed artifact tagging for decorative elements</li>
+      <li>Validated the document against Section 508 and PDF/UA standards</li>
+    </ul>
+  </details>
+
+  <p>
+    <strong>Outcome:</strong> Delivered a remediated document with improved accessibility for screen reader users,
+    more reliable table navigation, and clearer structural relationships for assistive technology.
+  </p>
             </article>
 
           </div>
