@@ -54,6 +54,9 @@
     body {
       margin: 0;
       padding: 0;
+      /* Set a --bg custom property using light-dark() */
+  --bg: light-dark(#FDFFFF, var(--color-accent));
+  background: var(--bg);
     }
 
     h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; margin: 0; }
@@ -330,8 +333,8 @@
       <h1 style="font-weight: bold;">Jennifer Mattice</h1>
       <nav aria-label="Primary Navigation">
         <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
-          <li><a href="#projects-section" style="color: var(--color-dark); font-weight: bold;">Portfolio</a></li>
           <li><a href="#about-section" style="color: var(--color-dark); font-weight: bold;">About</a></li>
+          <li><a href="#projects-section" style="color: var(--color-dark); font-weight: bold;">Portfolio</a></li>
           <li><a href="#contact-section" style="color: var(--color-dark); font-weight: bold;">Contact</a></li>
         </ul>
       </nav>
@@ -592,12 +595,14 @@
             <li><a href="#contact-section" style="color: var(--color-light); font-weight: bold; text-decoration: underline;">Contact</a></li>
           </ul>
         </nav>
+      </div>
       <p>&copy; 2026 Built with semantic HTML and accessibility best practices. Uses <a href="https://phosphoricons.com/" style="color: var(--color-light);" target="_blank" rel="noopener">Phosphor Icons <span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a></p>
         <p style="margin: 0;">
           <a href="#main-content" style="color: var(--color-light); font-weight: bold; text-decoration: underline;">
             Back to top <span aria-hidden="true"><i class="ph ph-arrow-up"></i></span>
           </a>
         </p>
+    </div>
   </footer>
 
   <script>
