@@ -31,14 +31,15 @@
       --color-dark: #2d7d86;
       --color-light: #fcfcfc;
       --color-accent: #16365c;
-      --color-accent-light: #e6f0fa;
-      --color-muted-border: #ccc;
+      --color-accent-light: light-dark(#E6F0FA, #16365c);
+      --color-muted-border: light-dark(#ccc, #16365c);
       --bg: light-dark(#FDFFFF, #16365c);
       --blue1: light-dark(#16365c, #FDFFFF);
       --blue2: light-dark(#16365c, #E6F0FA);
       --green1: light-dark(#2d7d86, #FCFCFC);
       --green2: light-dark(#2d7d86, #E6F0FA);
       --txt: light-dark(#16365c, #FDFFFF);
+      --accent2: light-dark(#E6F0FA, #16365c);
     }
 
     /* ==========================================================================
@@ -75,7 +76,7 @@
       outline-offset: 3px;
     }
     footer a:focus-visible {
-      outline: 3px solid var(--color-light);
+      outline: 3px solid var(--green1);
       outline-offset: 3px;
     }
 
@@ -232,7 +233,7 @@
     }
 
     .project-card {
-      background: var(--color-light);
+      background: var(--green1);
       padding: 0 0 0 var(--space-s);
     }
 
@@ -249,7 +250,7 @@
     .cta-button {
       display: inline-block;
       background-color: var(--blue2);
-      color: var(--color-light);
+      color: var(--green1);
       padding: var(--space-s);
       text-decoration: none;
       font-weight: bold;
