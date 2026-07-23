@@ -33,6 +33,10 @@
       --color-accent: #16365c;
       --color-accent-light: #e6f0fa;
       --color-muted-border: #ccc;
+      --bg: light-dark(#FDFFFF, #16365c);
+      --h1: light-dark(#16365c, #FDFFFF);
+      --h2: light-dark(#2d7d86, #FCFCFC);
+      --h3: light-dark(#2d7d86, #E6F0FA);
     }
 
     /* ==========================================================================
@@ -45,8 +49,8 @@
     html {
       font-family: var(--font-primary);
       font-size: 100%;
-      background-color: #FDFFFF;
-      color: var(--color-accent);
+      background-color: var(--bg);
+      color: var(--txt);
       line-height: 1.6;
       color-scheme: light dark;
     }
@@ -55,14 +59,14 @@
       margin: 0;
       padding: 0;
       /* Set a --bg custom property using light-dark() */
-  --bg: light-dark(#FDFFFF, var(--color-accent));
+  
   background: var(--bg);
     }
 
     h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; margin: 0; }
-    h1 { font-size: var(--step-3); color: var(--color-accent);}
-    h2 { font-size: var(--step-2); color: var(--color-dark);}
-    h3 { font-size: var(--step-1); color: var(--color-dark);}
+    h1 { font-size: var(--step-3); color: var(--h1);}
+    h2 { font-size: var(--step-2); color: var(--h2);}
+    h3 { font-size: var(--step-1); color: var(--h3);}
 
     *:focus-visible {
       outline: 3px solid var(--color-dark);
