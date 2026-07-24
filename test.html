@@ -338,6 +338,46 @@
     outline-offset: 2px;
   }
 }
+
+    /* ==========================================================================
+   TARGET SIZE & TOUCH ACCESSIBILITY ENHANCEMENTS (WCAG 2.5.8 / SC 2.5.5)
+   ========================================================================== */
+
+/* 1. Fix Header and Footer Nav Links Tap Target Sizes */
+header nav a,
+footer nav a,
+footer a {
+  display: inline-block;
+  min-height: 44px;
+  min-width: 44px;
+  line-height: 44px; /* Centers text vertically inside the touch area */
+  padding: 0 0.5rem;
+}
+
+/* 2. Fix Tab Trigger Buttons on Mobile / Small Screens */
+.tab-trigger {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 3. Ensure Details / Summary accordions have generous touch targets */
+summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+/* 4. Ensure CTA buttons meet tap targets across mobile viewports */
+.cta-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+}
   </style>
 </head>
 <body>
@@ -376,7 +416,7 @@
         <div>
           <h2 id="projects-heading">Portfolio</h2>
           <p>The following projects demonstrate accessibility-focused design, auditing, and remediation across web, systems, and document-based experiences.</p>
-          <p class="key-insight-box"><strong>Note:</strong> After tabbing to the first project, use your keyboard arrow keys to navigate between case study tabs.</p>
+          <p class="key-insight-box"><strong>Keyboard Users:</strong> After tabbing to the first project, use the arrow keys on your keyboard to navigate between case study tabs.</p>
         </div>
 
         <!-- THE SIDEBAR PRIMITIVE ARRANGEMENT (TIGHTER PROPORTIONS) -->
@@ -613,7 +653,7 @@
       </div>
       <p>&copy; 2026 Built with semantic HTML and accessibility best practices. Uses <a href="https://phosphoricons.com/" style="color: #fcfcfc;" target="_blank" rel="noopener">Phosphor Icons <span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a></p>
         <p style="margin: 0;">
-          <a href="#main-content" style="color: #fcfcfc; font-weight: bold; text-decoration: underline;">
+          <a href="#main" style="color: #fcfcfc; font-weight: bold; text-decoration: underline;">
             Back to top <span aria-hidden="true"><i class="ph ph-arrow-up"></i></span>
           </a>
         </p>
