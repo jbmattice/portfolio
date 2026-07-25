@@ -433,6 +433,7 @@ summary {
               <button id="tab-curriculum" role="tab" aria-selected="false" aria-controls="panel-curriculum" class="tab-trigger" tabindex="-1">02. Curriculum Chart</button>
               <button id="tab-audit" role="tab" aria-selected="false" aria-controls="panel-audit" class="tab-trigger" tabindex="-1">03. WCAG Audit</button>
               <button id="tab-media" role="tab" aria-selected="false" aria-controls="panel-media" class="tab-trigger" tabindex="-1">04. PDF/UA</button>
+              <button id="tab-meta" role="tab" aria-selected="false" aria-controls="panel-meta" class="tab-trigger" tabindex="-1">05. Design System</button>
             </div>
           </div>
 
@@ -623,6 +624,26 @@ summary {
   <strong>Impact:</strong> Established a scalable roadmap for the remaining K-6 packets, ensuring thousands of families have baseline summer learning access. The 2nd-grade benchmark artifact successfully passes automated PAC verification while preserving print fidelity.
 </p>
             </div>
+
+            <div id="panel-meta" role="tabpanel" tabindex="0" aria-labelledby="tab-meta" class="project-card l-stack" hidden>
+  <h3>Accessible Portfolio System & Architecture</h3>
+  <span class="meta-tag">Design system • Zero-dependency HTML/CSS • WCAG 2.2 AA</span>
+  <p>Architected and engineered a lightweight, high-performance personal portfolio from scratch using semantic HTML5, modern CSS custom properties, and standard-compliant WAI-ARIA patterns.</p>
+  
+  <p class="key-insight-box"><strong>Key Insight:</strong> True accessibility starts with low-complexity foundations—avoiding heavy frameworks allowed 100% automated audit passes and flawless screen reader behavior.</p>
+
+  <details>
+    <summary><strong>Technical Highlights</strong></summary>
+    <ul>
+      <li><strong>Token-Based Color System:</strong> Engine powered by native <code>light-dark()</code> and CSS custom properties passing WCAG 2.2 AAA contrast ratios across both modes.</li>
+      <li><strong>Robust Keyboard Navigation:</strong> Custom tablist implementation strictly following WAI-ARIA Authoring Practices (APG) with automatic arrow-key focus management.</li>
+      <li><strong>Fluid & Accessible Typography:</strong> Uses Atkinson Hyperlegible scaled via <code>clamp()</code> functions to support 400% zoom without horizontal scrolling or reflow breakage.</li>
+      <li><strong>High Contrast Mode Hardening:</strong> Tailored <code>forced-colors: active</code> media queries to guarantee native visual boundaries and focus indicators in Windows High Contrast Mode.</li>
+    </ul>
+  </details>
+
+  <p><strong>Impact:</strong> Achieves a 100% Lighthouse Accessibility score, zero automated errors, and full manual verification using NVDA, voice control, and touch target standards.</p>
+</div>
 
           </div>
         </div>
