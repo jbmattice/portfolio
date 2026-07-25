@@ -19,6 +19,12 @@
        ========================================================================== */
     :root {
       --font-primary: 'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
+      /* 
+    1. Base size starts at 1.125rem (~18px base) on mobile viewports.
+    2. Scales dynamically as the viewport grows.
+    3. Respects user browser/device font preferences because it uses `rem`.
+  */
+  font-size: clamp(1.125rem, 1rem + 1vw, 1.35rem);
 
       --step-0: clamp(1.00rem, 0.92rem + 0.38vw, 1.25rem);
       --step-1: clamp(1.20rem, 1.08rem + 0.60vw, 1.56rem);
@@ -74,6 +80,8 @@
       /* Set a --bg custom property using light-dark() */
   
   background: var(--bg);
+      /* Set body font to 1rem so it directly inherits the root fluid sizing */
+  font-size: 1rem;
     }
 
     h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; margin: 0; }
