@@ -635,14 +635,18 @@ summary {
   <details>
     <summary><strong>Technical Highlights</strong></summary>
     <ul>
-      <li><strong>Token-Based Color System:</strong> Engine powered by native <code>light-dark()</code> and CSS custom properties passing WCAG 2.2 AAA contrast ratios across both modes.</li>
       <li><strong>Robust Keyboard Navigation:</strong> Custom tablist implementation strictly following WAI-ARIA Authoring Practices (APG) with automatic arrow-key focus management.</li>
       <li><strong>Fluid & Accessible Typography:</strong> Uses Atkinson Hyperlegible scaled via <code>clamp()</code> functions to support 400% zoom without horizontal scrolling or reflow breakage.</li>
       <li><strong>High Contrast Mode Hardening:</strong> Tailored <code>forced-colors: active</code> media queries to guarantee native visual boundaries and focus indicators in Windows High Contrast Mode.</li>
+      <li><strong>Fluid Viewport & Reflow Architecture:</strong> Engineered using CSS <code>clamp()</code> fluid typography and Every Layout primitives (<code>.l-sidebar</code> and <code>.l-cluster</code>) to satisfy WCAG 1.4.10 Reflow down to 320px viewports without horizontal scrolling or reflow breakage up to 400% zoom.</li>
+      <li><strong>Touch Target & Viewport Bounds:</strong> Enforced a minimum 44×44px touch target area (WCAG 2.5.8) across all interactive controls, custom tab triggers, and detail summaries for mobile and tablet viewports.</li>
+      <li><strong>Token-Based Color System:</strong> Native <code>light-dark()</code> color engine using custom properties passing WCAG 2.2 AA contrast ratios across light and dark display modes.</li>
     </ul>
   </details>
 
-  <p><strong>Impact:</strong> Achieves a 100% Lighthouse Accessibility score, zero automated errors, and full manual verification using NVDA, voice control, and touch target standards.</p>
+  <p>
+    <strong>Impact:</strong> Achieves a 100% Lighthouse Accessibility score with zero issues identified via <strong>axe DevTools (4.12.1)</strong> and <strong>AInspector</strong> scans, alongside full manual verification using NVDA, voice control, and touch target standards across all viewport sizes.
+  </p>
 </div>
 
           </div>
