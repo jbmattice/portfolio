@@ -82,6 +82,14 @@
   background: var(--bg);
       /* Set body font to 1rem so it directly inherits the root fluid sizing */
   font-size: 1rem;
+      /* Adds breathing room at the left and right edges on mobile */
+  padding-left: var(--space-s, 1rem);
+  padding-right: var(--space-s, 1rem);
+
+  /* Keeps the content centered on larger desktop screens */
+  max-width: 70rem; /* ~1120px max reading width */
+  margin-left: auto;
+  margin-right: auto;
     }
 
     h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; margin: 0; }
