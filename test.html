@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Jennifer Mattice | Digital Accessibility Portfolio</title>
+  <meta name="description" content="Portfolio of digital accessibility-focused product design, audits, and remediation work.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>text{font-family:sans-serif;font-weight:bold;font-size:70px;fill:%2316365c;}@media(prefers-color-scheme:dark){text{fill:%23E6F0FA;}}</style><rect width='100' height='100' rx='20' fill='%232d7d86'/><text x='50%' y='55%' dominant-baseline='central' text-anchor='middle'>JM</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" >
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css" >
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & FLUID SYSTEMS
+       ========================================================================== */
+    :root {
+      --font-primary: 'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
+      /* 
+    1. Base size starts at 1.125rem (~18px base) on mobile viewports.
+    2. Scales dynamically as the viewport grows.
+    3. Respects user browser/device font preferences because it uses `rem`.
+  */
+  font-size: clamp(1.125rem, 1rem + 1vw, 1.35rem);
+
+      --step-0: clamp(1.00rem, 0.92rem + 0.38vw, 1.25rem);
+      --step-1: clamp(1.20rem, 1.08rem + 0.60vw, 1.56rem);
+      --step-2: clamp(1.44rem, 1.26rem + 0.90vw, 1.95rem);
+      --step-3: clamp(1.73rem, 1.46rem + 1.33vw, 2.44rem);
+
+      --space-s: clamp(0.50rem, 0.46rem + 0.19vw, 0.63rem);
+      --space-m: clamp(1.00rem, 0.92rem + 0.38vw, 1.25rem);
+      --space-l: clamp(2.00rem, 1.85rem + 0.77vw, 2.50rem);
+      --space-xl: clamp(4.00rem, 3.69rem + 1.54vw, 5.00rem);
+      
+/* light-dark themeing: https://una.im/modern-css-theming/
+      color combinations: https://contrast-grid.eightshapes.com/?version=1.1.0&background-colors=&foreground-colors=%2316365C%2C%20accent%0D%0A%232D7D86%2C%20Dark%0D%0A%23FCFCFC%2C%20Light%0D%0A%23E6F0FA%2C%20accent%202%0D%0A%23CCC%2C%20muted%0D%0A%23FDFFFF%2C%20bg%0D%0A&es-color-form__tile-size=regular&es-color-form__show-contrast=aaa&es-color-form__show-contrast=aa&es-color-form__show-contrast=aa18 */
+      --color-dark: #2d7d86; /*green */
+      --color-light: light-dark(#fcfcfc,#2d7d86);/*cream/ivory */
+      --color-accent: light-dark(#16365c, #E6F0FA); /*dark blue */
+      --color-accent-light: light-dark(#E6F0FA, #16365c); /*light blue */
+      --color-muted-border: light-dark(#ccc, #16365c); /* grey */
+      --bg: light-dark(#FDFFFF, #16365c); /*white or dark blue */
+      --blue1: light-dark(#16365c, #FDFFFF); /*dark blue or white */
+      --blue2: light-dark(#16365c, #E6F0FA); /*dark blue or light blue */
+      --green1: light-dark(#2d7d86, #FCFCFC); /*green or white */
+      --green2: light-dark(#2d7d86, #E6F0FA); /*green or light blue */
+      --txt: light-dark(#16365c, #FDFFFF); /*dark blue or white */
+      --accent2: light-dark(#E6F0FA, #16365c); /* light blue or dark blue */
+      --lt-dk: light-dark(#fcfcfc,#16365c);/*cream/ivory or dk blue*/
+      --ltblue: #E6F0FA;
+      --dkblue: #16365c;
+      --bl-gr: light-dark(#16365c,#2d7d86);
+      --bl-wh: light-dark(#E6F0FA, #FCFCFC); /* light blue or white */
+      --ltbl-gr: light-dark(#E6F0FA, #2d7d86); /* light blue or green */
+    }
+
+    /* ==========================================================================
+       2. GLOBAL RESET & ACCESSIBILITY DEFAULTS
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: var(--font-primary);
+      font-size: 100%;
+      background-color: var(--bg);
+      color: var(--txt);
+      line-height: 1.6;
+      color-scheme: light dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      /* Set a --bg custom property using light-dark() */
+  
+  background: var(--bg);
+      /* Set body font to 1rem so it directly inherits the root fluid sizing */
+  font-size: 1rem;
+      /* Adds breathing room at the left and right edges on mobile */
+  padding-left: var(--space-s, 1rem);
+  padding-right: var(--space-s, 1rem);
+
+  /* Keeps the content centered on larger desktop screens */
+  max-width: 70rem; /* ~1120px max reading width */
+  margin-left: auto;
+  margin-right: auto;
+    }
+
+    h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; margin: 0; }
+    h1 { font-size: var(--step-3); color: var(--blue1);}
+    h2 { font-size: var(--step-2); color: var(--green1);}
+    h3 { font-size: var(--step-1); color: var(--green2);}
+
+    *:focus-visible {
+      outline: 3px solid var(--green1);
+      outline-offset: 3px;
+    }
+    footer a:focus-visible {
+      outline: 3px solid #fcfcfc;
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: var(--space-m);
+      background: var(--bl-gr);
+      color: #fcfcfc;
+      padding: var(--space-s);
+      z-index: 100;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    .skip-link:focus { top: var(--space-m); }
+
+    /* ==========================================================================
+       3. EVERY LAYOUT PRIMITIVES
+       ========================================================================== */
+    .l-stack > * + * {
+      margin-top: var(--space-m);
+    }
+    .l-stack--large > * + * {
+      margin-top: var(--space-l);
+    }
+
+    .l-center {
+      box-sizing: content-box;
+      max-width: 75ch; 
+      margin-left: auto;
+      margin-right: auto;
+      padding: var(--space-s) var(--space-l);
+    }
+
+    .l-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-m);
+      align-items: center;
+    }
+    .l-cluster--space-between { justify-content: space-between; }
+
+/* ==========================================================================
+   THE BULLETPROOF SIDEBAR GRID ENGINE
+   ========================================================================== */
+
+/* 1. Base Mobile / High-Zoom Layout: Single Column Stacked */
+.l-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+/* 2. Desktop Layout: Only switches to side-by-side if there is room */
+@media (min-width: 48rem) {
+  .l-sidebar {
+    display: grid;
+    /* Column 1 is locked to exactly 13rem. Column 2 takes up the rest of the page */
+    grid-template-columns: 13rem 1fr; 
+    gap: var(--space-m);
+  }
+}
+
+/* Column Decorators */
+.l-sidebar > :first-child {
+  /* Clean bottom divider for mobile, switches to right divider on desktop */
+  border-bottom: none;
+  padding-bottom: var(--space-s);
+}
+
+@media (min-width: 48rem) {
+  .l-sidebar > :first-child {
+    border-bottom: none;
+    border-right: 2px solid var(--green1);
+    padding-bottom: 0;
+    padding-right: var(--space-m);
+  }
+}
+
+/* ==========================================================================
+   CLEAN TYPOGRAPHY TAB TRIGGERS
+   ========================================================================== */
+.tab-trigger {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.05rem;
+  font-family: inherit;
+  color: var(--green1);
+  
+  /* Horizontal arrangement on mobile/zoom */
+  display: inline-block;
+  width: auto;
+  padding: var(--space-s) var(--space-m);
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+/* Desktop orientation changes for the buttons */
+@media (min-width: 48rem) {
+  .tab-trigger {
+    display: block;
+    width: 100%;
+    padding: var(--space-s) var(--space-m);
+    border-bottom: none;
+    border-left: 3px solid transparent; /* Indicators on the left side */
+  }
+}
+
+/* Hover effect */
+.tab-trigger:hover {
+  background-color: var(--ltbl-gr);
+}
+
+/* Active Selected Tab - Mobile (Bottom border) */
+.tab-trigger[aria-selected="true"] {
+  font-weight: bold;
+  border-bottom: 3px solid var(--blue1);
+}
+
+/* Active Selected Tab - Desktop (Left border override) */
+@media (min-width: 48rem) {
+  .tab-trigger[aria-selected="true"] {
+    border-bottom: none;
+    border-left: 3px solid var(--blue1);
+  }
+}
+
+/* Focus indicator safety */
+.tab-trigger:focus-visible {
+  outline: 3px solid var(--blue1);
+  outline-offset: -3px;
+}
+
+/* High Contrast mode rules */
+@media (forced-colors: active) {
+  .tab-trigger[aria-selected="true"] {
+    outline: 2px solid ButtonText;
+  }
+}
+/* Keep high-contrast rules pristine */
+@media (forced-colors: active) {
+  .tab-trigger[aria-selected="true"] {
+    outline: 2px solid ButtonText;
+  }
+}
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .project-card {
+      background: var(--bg);
+      padding: 0 0 0 var(--space-s);
+    }
+
+    .project-card:focus-visible {
+  outline: 3px solid var(--green1);
+  outline-offset: -3px;
+  border-radius: 4px;
+}
+
+    .meta-tag {
+      display: inline-block;
+      background: var(--bl-wh);
+      color: var(--bl-gr);
+      font-weight: bold;
+      font-size: 0.9rem;
+      padding: var(--space-s);
+      border-radius: 4px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background-color: var(--blue2);
+      color: var(--lt-dk);
+      padding: var(--space-s);
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    .cta-button:hover {
+      background-color: var(--green1);
+    }
+
+  .sr-only:not(:focus):not(:active):not(:focus-within) {
+ position: absolute;
+ width: 1px;
+ height: 1px;
+ overflow: hidden;
+ clip-path: inset(50%);
+ white-space: nowrap;
+}
+
+    .key-insight-box {
+  background-color: var(--bl-wh);
+      color: var(--bl-gr);
+  padding: var(--space-s);
+  margin: var(--space-s) 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Ensure high contrast mode users still see the left accent line */
+@media (forced-colors: active) {
+  .key-insight-box {
+    outline: 1px solid ButtonText;
+    border-left-width: 6px;
+  }
+}
+
+    @media (forced-colors: active) {
+  
+  /* 1. Ensure CTA buttons retain a physical border/outline */
+  .btn, 
+  a[role="button"],
+  .cta-button {
+    outline: 2px solid ButtonText;
+    outline-offset: 1px;
+  }
+
+  /* 2. Distinct interaction states using standard system highlight keywords */
+  .btn:hover,
+  .btn:focus-visible,
+  a[role="button"]:hover,
+  a[role="button"]:focus-visible {
+    text-decoration: underline;
+    outline-color: Highlight;
+    outline-width: 3px;
+  }
+
+  /* 3. Ensure the active sidebar tab trigger is distinctly framed */
+  .tab-trigger[aria-selected="true"] {
+    outline: 2px solid ButtonText;
+    outline-offset: -2px; /* Pulls it inside slightly to maintain clean spacing */
+  }
+
+      /* Force outlines on CTA buttons and active tabs (from previous step) */
+  .btn, a[role="button"], .cta-button { outline: 2px solid ButtonText; }
+  .tab-trigger[aria-selected="true"] { outline: 2px solid ButtonText; outline-offset: -2px; }
+
+  /* 4. Fix Footer Links: Ensure all anchor links in the footer display underlines */
+  footer a {
+    text-decoration: underline;
+  }
+
+  /* Provide a system highlight color change when hovering/focusing footer links */
+  footer a:hover,
+  footer a:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+    /* ==========================================================================
+   TARGET SIZE & TOUCH ACCESSIBILITY ENHANCEMENTS (WCAG 2.5.8 / SC 2.5.5)
+   ========================================================================== */
+
+/* 1. Fix Header and Footer Nav Links Tap Target Sizes */
+header nav a,
+footer nav a,
+footer a {
+  display: inline-block;
+  min-height: 44px;
+  min-width: 44px;
+  line-height: 44px; /* Centers text vertically inside the touch area */
+  padding: 0 0.5rem;
+}
+
+/* 2. Fix Tab Trigger Buttons on Mobile / Small Screens */
+.tab-trigger {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 3. Ensure Details / Summary accordions have generous touch targets */
+summary {
+  min-height: 44px;
+  display: list-item;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+/* 4. Ensure CTA buttons meet tap targets across mobile viewports */
+.cta-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+}
+
+    .read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.read-btn:hover {
+  background-color: #f3f4f6;
+}
+
+/* Style toggle state when audio is active */
+.read-btn[aria-pressed="true"] {
+  background-color: #e02424;
+  color: #ffffff;
+  border-color: #c81e1e;
+}
+  </style>
+</head>
+<body>
+<header style="padding: var(--space-m) 0; border-bottom: 1px solid var(--color-muted-border);">
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <div class="l-center l-cluster l-cluster--space-between">
+      <h1 style="font-weight: bold;">Jennifer Mattice</h1>
+      <nav aria-label="Primary Navigation">
+        <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
+          <li><button id="read-aloud-btn" type="button" aria-pressed="false" class="read-btn">
+  <span class="btn-icon">🔊</span>
+  <span class="btn-text">Listen</span>
+</button></li>
+          <li><a href="#about" style="color: var(--green1); font-weight: bold;">About</a></li>
+          <li><a href="#projects" style="color: var(--green1); font-weight: bold;">Portfolio</a></li>
+          <li><a href="#contact" style="color: var(--green1); font-weight: bold;">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="l-stack l-stack" tabindex="-1" style="padding: var(--space-s) 0;">
+
+   <section id="about" aria-labelledby="about-heading" class="l-center">
+      <div class="l-stack">
+        <h2 id="about-heading">About Me</h2>
+       <section class="about-me">
+  <!-- Opening Hook -->
+  <p class="about-intro">
+I help teams make their digital experiences usable for everyone, not just compliant on paper. I've spent years doing that inside Fairfax County Public Schools, one of the largest school districts in the country. I'm used to working in complex environments with real constraints — legacy systems, non-technical stakeholders, huge scale. My background is in education and psychology, which shapes how I approach accessibility. I don't just flag WCAG violations. I translate what needs to change into language developers and content teams can actually act on. That's the part I'm really good at — bridging the gap between the standard and the human.</p>
+
+  <!-- Key Area 1 -->
+  <details>
+    <summary><strong>Cognitive and Human-Centered Design</strong></summary>
+    <ul>
+  <li>
+   <strong>Reducing Cognitive Load and</strong> mental fatigue by:
+    <ul>
+      <li>
+        Minimizing visual noise.
+      </li>
+      <li>
+        Avoiding timed interactions.
+      </li>
+      <li>
+        Structuring complex workflows.
+      </li>
+    </ul>
+  </li>
+  <li>
+   <strong>Support varying attention spans and reading levels</strong> by:
+    <ul>
+		<li>Using plain language.</li>
+      <li>
+        Organizing content with headings.
+      </li>
+      <li>
+       Breaking up blocks of text into shorter sentences and bulleted lists.
+      </li>
+      <li>
+       Using accessible hyperlinks with clear calls to action.
+      </li>
+    </ul>
+  </li>
+  <li>
+	  <strong>Usability Beyond Technical Compliance:</strong>
+    <ul>
+      <li>
+        Focusing on how real people experience an interface.
+      </li>
+      <li>
+      Moving past checkbox audits.
+      </li>
+      <li>
+        Including neurodivergent individuals, assistive technology users, and older/younger people.
+      </li>
+    </ul>
+  </li>
+</ul>
+  </details>
+
+  <!-- Key Area 2 -->
+  <details>
+    <summary><strong>Semantic Code and Visual Craft</strong></summary>
+    <ul>
+  <li>
+    <strong>Extending Native HTML with CSS:</strong>
+    <ul>
+      <li>
+        Building rich and engaging interfaces.
+      </li>
+      <li>
+        Digging deep into CSS to build custom, missing UI components out of native, accessible markup.
+      </li>
+      <li>
+        Minimizing JavaScript overhead.
+      </li>
+    </ul>
+  </li>
+  <li>
+    <strong>Respecting User Preferences:</strong> Building resilient components that automatically adapt to light/dark themes, high-contrast modes, and reduced-motion preferences.
+  </li>
+  <li>
+    <strong>Fluid and Inclusive Layouts:</strong>
+    <ul>
+      <li>
+        Using device-level settings.
+      </li>
+      <li>
+        Using modern CSS (like fluid typography, Flexbox, and Grid).
+      </li>
+      <li>
+        Making sure layouts scale across all devices.
+      </li>
+    </ul>
+  </li>
+</ul>
+  </details>
+
+  <!-- Key Area 3 -->
+  <details>
+    <summary><strong>Auditing, Remediation and Trusted Tester Compliance</strong></summary>
+    <ul>
+  <li>Evaluating digital products using the DHS Trusted Tester Methodology.</li>
+  <li>Applying standardized, repeatable testing protocols.</li>
+  <li>Combining automated and manual testing.</li>
+  <li>Translating issues into clear, developer-friendly fixes that preserve both accessibility and UI integrity.</li>
+</ul>
+  </details>
+</section>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-heading" class="l-center">
+      <div class="l-stack">
+        
+        <div>
+          <h2 id="projects-heading">Portfolio</h2>
+          <p>The following projects demonstrate accessibility-focused design, auditing, and remediation across web, systems, and document-based experiences.</p>
+          <p class="key-insight-box"><strong>Keyboard Users:</strong> After tabbing to the first project, use the arrow keys on your keyboard to navigate between case study tabs.</p>
+        </div>
+
+        <!-- THE SIDEBAR PRIMITIVE ARRANGEMENT (TIGHTER PROPORTIONS) -->
+        <div class="l-sidebar">
+          
+          <!-- Column 1: The Sidebar Tablist -->
+          <div class="tab-list-wrapper">
+            <div role="tablist" aria-label="Case Studies Portfolio">
+              <button id="tab-catalog" role="tab" aria-selected="true" aria-controls="panel-catalog" class="tab-trigger">01. Legacy App</button>
+              <button id="tab-curriculum" role="tab" aria-selected="false" aria-controls="panel-curriculum" class="tab-trigger" tabindex="-1">02. Curriculum Chart</button>
+              <button id="tab-audit" role="tab" aria-selected="false" aria-controls="panel-audit" class="tab-trigger" tabindex="-1">03. WCAG Audit</button>
+              <button id="tab-media" role="tab" aria-selected="false" aria-controls="panel-media" class="tab-trigger" tabindex="-1">04. PDF/UA</button>
+              <button id="tab-meta" role="tab" aria-selected="false" aria-controls="panel-meta" class="tab-trigger" tabindex="-1">05. Design System</button>
+            </div>
+          </div>
+
+          <!-- Column 2: Main Content Area Tab Panels -->
+          <div>
+            
+            <div id="panel-catalog" role="tabpanel" aria-labelledby="tab-catalog" class="project-card l-stack" tabindex="0">
+              <h3>Legacy Course Catalog and Transportation Application</h3>
+              <span class="meta-tag">Accessibility rebuild • Mobile-first • Section 508 / WCAG 2.1 AA</span>
+              <p>Modernized and optimized legacy content into a mobile-responsive, 508-compliant platform. The work focused on making course and transportation information usable for students and parents across devices and assistive technologies.</p>
+              <p><strong>Key Insight:</strong> Accessibility issues often stem from structural constraints inside the system, not just visual design choices.</p>
+              <div>
+                <a href="https://isweb.fcps.edu/CTE/" class="cta-button" target="_blank" rel="noopener">Academy Transportation Finder <span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a>
+              </div>
+              
+              <details>
+                <summary><strong>Challenges</strong></summary>
+                <ul>
+                  <li>Legacy content was not designed for accessibility and required substantial restructuring</li>
+                  <li>A mandatory CMS shell introduced layout and styling constraints that limited direct fixes</li>
+                  <li>Known accessibility defects existed in the underlying structure and brand styling</li>
+                  <li>The experience needed to work reliably on mobile, desktop, and with assistive technologies</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary><strong>Solutions</strong></summary>
+                <ul>
+                  <li>Re-architected the content using semantic HTML to improve structure and assistive technology support</li>
+                  <li>Engineered custom HTML5/CSS3 workarounds to compensate for shell-level accessibility defects</li>
+                  <li>Remediated layout, navigation, contrast, focus, zoom, and reflow issues</li>
+                  <li>Added print support with a dedicated print stylesheet for users who needed hard copies</li>
+                  <li>Made incremental improvements over a three-month period while working within existing constraints</li>
+                </ul>
+              </details>
+
+              <details>
+                <summary><strong>Tradeoffs and Decisions</strong></summary>
+                <p>
+                  I could not change the CMS shell or brand styling directly, so I prioritized accessibility first and then
+                  improved usability with targeted enhancements such as print functionality and CSS refinements. If I had access
+                  to the shell CSS, I would have resolved more issues at the source; instead, I focused on the highest-impact
+                  changes that could be delivered safely within the existing system.
+                </p>
+              </details>
+
+              <p>
+                <strong>Impact:</strong> Students and parents now have full access to the information using screen readers,
+                keyboard navigation, and zoom up to 400%. The experience is also more usable on mobile and desktop, with
+                clearer structure, better performance, and improved print output.
+              </p>
+            </div>
+
+            <div id="panel-curriculum" role="tabpanel" tabindex="0" aria-labelledby="tab-curriculum" class="project-card l-stack" hidden>
+              <h3>Accessible Gantt Chart for Curriculum Timeline</h3>
+              <span class="meta-tag">Data visualization • System design • WCAG compliance</span>
+              <p>Designed and implemented a reusable, accessible timeline system across 100+ curriculum pages by grade level and subject area to visualize learning progression by quarter and week.</p>
+               <p>
+    <strong>Key Insight:</strong> Accessibility and translation needs shaped the information design as much as the visual presentation.
+  </p>
+
+  <p>
+   <a href="https://www.fcps.edu/node/47287" class="cta-button" target="_blank" rel="noopener">Grade 5 Math Curriculum<span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span>
+    <span class="sr-only">(opens in new tab)</span></a>
+  </p>
+
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Organizational leadership needed a visual representation of the school year by week and quarter.</li>
+      <li>The source content was provided in a table, but a traditional table would not work because the data required merged and split cells.</li>
+      <li>Image-based solutions would not translate cleanly for families who needed multilingual access.</li>
+      <li>Many attempted solutions did not mesh with the CMS, requiring multiple iterations to find a workable CSS-only approach.</li>
+      <li>Unit lengths varied significantly, from 3-week units to 5-week units, and the design needed to adapt across grade levels and subject areas.</li>
+      <li>The solution had to be manually replicated across 100+ pages, so it needed to be scalable and efficient to maintain.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Solutions</strong></summary>
+    <ul>
+      <li>Rejected image-based approaches so the content would remain accessible and translatable.</li>
+      <li>Avoided traditional tables because split and merged cells would create structural and accessibility problems.</li>
+      <li>Researched and tested CSS-only chart patterns until I found a solution that worked within the CMS.</li>
+      <li>Designed a flexible structure that could support varying unit lengths and differences across subjects and grade levels.</li>
+      <li>Created custom CSS that transformed the timeline into a mobile-friendly bulleted list on smaller screens.</li>
+      <li>Ensured the final pattern remained usable with keyboard navigation and screen readers.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Tradeoffs and Decisions</strong></summary>
+    <p>
+      I needed a solution that balanced accessibility, translation, and maintainability while working within CMS
+      constraints. I chose a CSS-only pattern because it could scale across 100+ pages, support mobile users, and
+      adapt to changing content structures without introducing unnecessary complexity.
+    </p>
+  </details>
+
+  <p>
+    <strong>Impact:</strong>
+    Teachers now share these pages with parents at the beginning of the school year during back-to-school night.
+    Instead of relying on high-level PDFs or handouts, parents can see the exact standards taught in each unit by
+    week and by quarter. This gives families a clearer understanding of the curriculum and improves communication
+    between home and school.
+  </p>
+            </div>
+            <div id="panel-audit" role="tabpanel" tabindex="0" aria-labelledby="tab-audit" class="project-card l-stack" hidden>
+              <h3>Accessibility Audit and Remediation Guidance</h3>
+              <span class="meta-tag">WCAG audit • Developer collaboration • Remediation guidance</span>
+              <p>
+    Conducted a comprehensive WCAG 2.2 AA audit of a dynamic web platform, evaluating 55 success criteria and
+    identifying critical accessibility issues.
+  </p>
+
+  <p>
+    <strong>Key Insight:</strong> Many accessibility barriers came from structure, labeling, and responsive behavior,
+    not just color contrast or obvious missing text.
+  </p>
+
+  <details>
+    <summary><strong>Challenges</strong></summary>
+    <ul>
+      <li>Missing or inconsistent alt text for images and functional graphics</li>
+      <li>Reflow and zoom issues causing horizontal scrolling at higher magnification</li>
+      <li>Unclear link purpose and inconsistent labeling across controls</li>
+      <li>ARIA and semantic HTML mismatches affecting screen reader output</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Approach</strong></summary>
+    <ul>
+      <li>Used DHS Trusted Tester methodology to evaluate compliance systematically</li>
+      <li>Tested with NVDA, keyboard navigation, ANDI, and IBM Accessibility Checker</li>
+      <li>Reviewed structure, labels, reading order, and responsive behavior</li>
+      <li>Documented findings and recommendations for the development team</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary><strong>Sample Findings</strong></summary>
+    <ul>
+      <li><strong>Missing alt text:</strong> Images were hidden or lacked meaningful descriptions.</li>
+      <li><strong>Reflow issues:</strong> Content required horizontal scrolling at higher zoom levels.</li>
+      <li><strong>Unclear link purpose:</strong> Links and controls were inconsistently labeled.</li>
+    </ul>
+  </details>
+
+  <p>
+    <strong>Outcome:</strong> Provided detailed remediation guidance and collaborated with developers to improve
+    accessibility and awareness across the platform.
+  </p>
+            </div>
+
+            <div id="panel-media" role="tabpanel" tabindex="0" aria-labelledby="tab-media" class="project-card l-stack" hidden>
+              <h3>High-Volume K-6 Educational PDF Workbooks</h3>
+              <span class="meta-tag">PDF Remediation • Public Sector • WCAG 2.2 AA and PDF/UA</span>
+              <p>
+    Led the accessibility architecture and remediation strategy for a massive suite of public summer curriculum workbooks spanning grades K-6. The benchmark project focused on a highly visual, 54-page 2nd Grade Language Arts workbook containing irregular multi-column layouts, tables, and vendor-provided assets.
+  </p>
+<p>
+   <a href="https://www.fcps.edu/system/files/forms/2026-06/grade2-la-packet-accessible.pdf" class="cta-button" target="_blank" rel="noopener">Grade 2 Language Arts Packet <span aria-hidden="true"><i class="ph ph-file-pdf"></i> <i class="ph ph-arrow-square-out"></i></span>
+    <span class="sr-only">(PDF opens in new tab)</span></a>
+  </p>
+  <h4>The Process</h4>
+<p>Established a multi-stage production pipeline: content teams initiated layouts in Google Docs, utilized Grackle Docs for initial structural analysis, and exported to PDF. I then performed deep-level manual remediation in Adobe Acrobat Pro—rigorously walking the Tag Tree and verifying the Reading Order panel—before validating compliance using the PAC (PDF Accessibility Checker) engine.</p>
+
+<details>
+  <summary><strong>Challenges</strong></summary>
+  <ul>
+    <li><strong>Non-Interactive AT Navigation:</strong> The document is designed to be printed rather than filled out digitally, yet it still had to remain fully navigable and coherent for students utilizing Assistive Technology (AT) without form fields. Very little documentation exists for this specific engineering requirement.</li>
+    <li><strong>Inaccessible Third-Party Vendor Assets:</strong> Embedded handwriting tracing pages featured a black line example followed by low-contrast grey lines for tracing. The vendor-supplied grey lines failed contrast requirements, creating a systemic barrier that could not be modified at the source.</li>
+    <li><strong>Velocity and Scale:</strong> Manually remediating tag structures, establishing reading flows, and fixing reading orders across 50 to 60+ pages per packet presents an immense time and resource bottleneck.</li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong>Solutions and Technical Tradeoffs</strong></summary>
+  <ul>
+    <li><strong>Custom Static Tagging Structures:</strong> Engineered a predictable, linear keyboard reading order without relying on interactive form controls. Visual placeholders and text indicators were meticulously mapped to structural paragraph tags (<code>&lt;P&gt;</code>) and list elements to guide AT users through tasks meant for print.</li>
+    <li><strong>Vendor Risk Management:</strong> Documented the vendor-driven contrast failures as an institutional compliance exception. Compensated by rewriting explicit descriptive alt-text and layout instructions to ensure the *intent* of the handwriting exercises was communicated clearly via screen readers.</li>
+    <li><strong>Pipeline Automation:</strong> Created a reusable tagging template playbook for the curriculum staff, shifting accessibility upstream into Google Docs to radically reduce manual clean-up time in Acrobat.</li>
+  </ul>
+</details>
+
+<p>
+  <strong>Impact:</strong> Established a scalable roadmap for the remaining K-6 packets, ensuring thousands of families have baseline summer learning access. The 2nd-grade benchmark artifact successfully passes automated PAC verification while preserving print fidelity.
+</p>
+            </div>
+
+            <div id="panel-meta" role="tabpanel" tabindex="0" aria-labelledby="tab-meta" class="project-card l-stack" hidden>
+  <h3>Accessible Portfolio System & Architecture</h3>
+  <span class="meta-tag">Design system • Zero-dependency HTML/CSS • WCAG 2.2 AA</span>
+  <p>Architected and engineered a lightweight, high-performance personal portfolio from scratch using semantic HTML5, modern CSS custom properties, and standard-compliant WAI-ARIA patterns.</p>
+  
+  <p><strong>Key Insight:</strong> True accessibility starts with low-complexity foundations—avoiding heavy frameworks allowed 100% automated audit passes and flawless screen reader behavior.</p>
+
+  <details>
+    <summary><strong>Technical Highlights</strong></summary>
+    <ul>
+      <li><strong>Robust Keyboard Navigation:</strong> Custom tablist implementation strictly following WAI-ARIA Authoring Practices (APG) with automatic arrow-key focus management.</li>
+      <li><strong>Fluid & Accessible Typography:</strong> Uses Atkinson Hyperlegible scaled via <code>clamp()</code> functions to support 400% zoom without horizontal scrolling or reflow breakage.</li>
+      <li><strong>High Contrast Mode Hardening:</strong> Tailored <code>forced-colors: active</code> media queries to guarantee native visual boundaries and focus indicators in Windows High Contrast Mode.</li>
+      <li><strong>Fluid Viewport & Reflow Architecture:</strong> Engineered using CSS <code>clamp()</code> fluid typography and Every Layout primitives (<code>.l-sidebar</code> and <code>.l-cluster</code>) to satisfy WCAG 1.4.10 Reflow down to 320px viewports without horizontal scrolling or reflow breakage up to 400% zoom.</li>
+      <li><strong>Touch Target & Viewport Bounds:</strong> Enforced a minimum 44×44px touch target area (WCAG 2.5.8) across all interactive controls, custom tab triggers, and detail summaries for mobile and tablet viewports.</li>
+      <li><strong>Token-Based Color System:</strong> Native <code>light-dark()</code> color engine using custom properties passing WCAG 2.2 AA contrast ratios across light and dark display modes.</li>
+    </ul>
+  </details>
+
+  <p>
+    <strong>Impact:</strong> Achieves a 100% Lighthouse Accessibility score with zero issues identified via <strong>axe DevTools (4.12.1)</strong> and <strong>AInspector</strong> scans, alongside full manual verification using NVDA, voice control, and touch target standards across all viewport sizes.
+  </p>
+</div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-heading" class="l-center">
+      <div class="l-stack">
+        <h2 id="contact-heading">Contact</h2>
+        <p>Whether you are looking to build a scalable document remediation pipeline, train your curriculum staff on upstream accessibility, or need an audit for WCAG compliance, let's connect.</p>
+        <p>
+          <a class="cta-button" href="https://www.linkedin.com/in/jennifer-mattice-987a682/">Connect with me <i class="ph-fill ph-linkedin-logo" aria-label="on LinkedIn" role="img"></i></a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="background: var(--color-dark); color: #fcfcfc; padding: var(--space-m) 0; margin-top: var(--space-s);">
+    <div class="l-center l-stack l-stack">
+      
+      <!-- Footer Nav and Back to Top Link clustered neatly -->
+      <div class="l-cluster l-cluster--space-between">
+        <nav aria-label="Footer Quick Links">
+          <ul class="l-cluster" style="list-style: none; padding: 0; margin: 0;">
+            <li><a href="#about" style="color: #fcfcfc; font-weight: bold; text-decoration: underline;">About</a></li>
+            <li><a href="#projects" style="color: #fcfcfc; font-weight: bold; text-decoration: underline;">Portfolio</a></li>
+            <li><a href="#contact" style="color: #fcfcfc; font-weight: bold; text-decoration: underline;">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p>&copy; 2026 Built with semantic HTML and accessibility best practices. Uses <a href="https://phosphoricons.com/" style="color: #fcfcfc;" target="_blank" rel="noopener">Phosphor Icons <span aria-hidden="true"><i class="ph ph-arrow-square-out"></i></span> <span class="sr-only">(opens in new tab)</span></a></p>
+        <p style="margin: 0;">
+          <a href="#main" style="color: #fcfcfc; font-weight: bold; text-decoration: underline;">
+            Back to top <span aria-hidden="true"><i class="ph ph-arrow-up"></i></span>
+          </a>
+        </p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const tabList = document.querySelector('[role="tablist"]');
+      const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+      const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', e => {
+          const targetPanelId = tab.getAttribute('aria-controls');
+          setActiveTab(tab, targetPanelId);
+        });
+
+        tab.addEventListener('keydown', e => {
+          let index = tabs.indexOf(tab);
+          let nextIndex;
+
+          switch (e.key) {
+            case 'ArrowDown':
+            case 'ArrowRight':
+              e.preventDefault();
+              nextIndex = (index + 1) % tabs.length;
+              tabs[nextIndex].focus();
+              setActiveTab(tabs[nextIndex], tabs[nextIndex].getAttribute('aria-controls'));
+              break;
+            case 'ArrowUp':
+            case 'ArrowLeft':
+              e.preventDefault();
+              nextIndex = (index - 1 + tabs.length) % tabs.length;
+              tabs[nextIndex].focus();
+              setActiveTab(tabs[nextIndex], tabs[nextIndex].getAttribute('aria-controls'));
+              break;
+            case 'Home':
+              e.preventDefault();
+              tabs[0].focus();
+              setActiveTab(tabs[0], tabs[0].getAttribute('aria-controls'));
+              break;
+            case 'End':
+              e.preventDefault();
+              tabs[tabs.length - 1].focus();
+              setActiveTab(tabs[tabs.length - 1], tabs[tabs.length - 1].getAttribute('aria-controls'));
+              break;
+          }
+        });
+      });
+
+      function setActiveTab(activeTab, targetPanelId) {
+        tabs.forEach(tab => {
+          const isSelected = tab === activeTab;
+          tab.setAttribute('aria-selected', isSelected);
+          tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+        });
+
+        panels.forEach(panel => {
+          if (panel.id === targetPanelId) {
+            panel.removeAttribute('hidden');
+          } else {
+            panel.setAttribute('hidden', '');
+          }
+        });
+      }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+  const readBtn = document.querySelector('#read-aloud-btn');
+  if (!readBtn) return;
+
+  // Graceful degradation for unsupported browsers
+  if (!('speechSynthesis' in window)) {
+    readBtn.style.display = 'none';
+    return;
+  }
+
+  let isSpeaking = false;
+
+  readBtn.addEventListener('click', () => {
+    isSpeaking ? stopSpeech() : startSpeech();
+  });
+
+  function startSpeech() {
+    // 1. Target main content container (fallback to body)
+    const targetElement = document.querySelector('main') || document.body;
+    const rawText = targetElement.innerText.trim();
+
+    if (!rawText) return;
+
+    // 2. Split long text into sentence chunks (prevents Chromium timeout bug)
+    const sentences = rawText.match(/[^.!?]+[.!?]+/g) || [rawText];
+
+    window.speechSynthesis.cancel(); // Clear queued utterances
+
+    sentences.forEach((sentence, index) => {
+      const utterance = new SpeechSynthesisUtterance(sentence.trim());
+      utterance.lang = document.documentElement.lang || 'en-US';
+
+      // Update UI on start of first sentence
+      if (index === 0) {
+        utterance.onstart = () => {
+          isSpeaking = true;
+          readBtn.setAttribute('aria-pressed', 'true');
+          readBtn.querySelector('.btn-text').textContent = 'Stop';
+          readBtn.querySelector('.btn-icon').textContent = '⏹️';
+        };
+      }
+
+      // Reset UI when speech finishes or errors out
+      if (index === sentences.length - 1) {
+        utterance.onend = resetState;
+        utterance.onerror = resetState;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+
+  function stopSpeech() {
+    window.speechSynthesis.cancel();
+    resetState();
+  }
+
+  function resetState() {
+    isSpeaking = false;
+    readBtn.setAttribute('aria-pressed', 'false');
+    readBtn.querySelector('.btn-text').textContent = 'Listen';
+    readBtn.querySelector('.btn-icon').textContent = '🔊';
+  }
+});
+  </script>
+</body>
+</html>
