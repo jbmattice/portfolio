@@ -904,7 +904,7 @@ I help teams make their digital experiences usable for everyone, not just compli
     });
 
 	  /* speak button */
-    document.addEventListener('DOMContentLoaded', () => {
+   document.addEventListener('DOMContentLoaded', () => {
   const readBtn = document.querySelector('#read-aloud-btn');
   const stopBtn = document.querySelector('#stop-speech-btn');
   if (!readBtn) return;
@@ -915,80 +915,57 @@ I help teams make their digital experiences usable for everyone, not just compli
     return;
   }
 
-  let sentences = [];
-  let currentIndex = 0;
-  let isSpeaking = false;
-  let isPaused = false;
+  const synth = window.speechSynthesis;
 
   readBtn.addEventListener('click', () => {
-    if (!isSpeaking && !isPaused) {
-      // 1. Initial Start
-      const targetElement = document.querySelector('main') || document.body;
-      const rawText = targetElement.innerText.trim();
-      if (!rawText) return;
-
-      sentences = rawText.match(/[^.!?]+[.!?]+/g) || [rawText];
-      currentIndex = 0;
-      speakFromIndex(currentIndex);
-    } else if (isSpeaking && !isPaused) {
-      // 2. Pause Playback
-      pauseSpeech();
-    } else if (isPaused) {
-      // 3. Resume Playback
-      speakFromIndex(currentIndex);
+    // 1. Currently speaking -> PAUSE
+    if (synth.speaking && !synth.paused) {
+      synth.pause();
+      updateUI('paused');
+      return;
     }
+
+    // 2. Currently paused -> RESUME
+    if (synth.paused) {
+      synth.resume();
+      updateUI('speaking');
+      return;
+    }
+
+    // 3. Idle -> START READING
+    const targetElement = document.querySelector('main') || document.body;
+    const rawText = targetElement.innerText.trim();
+    if (!rawText) return;
+
+    synth.cancel(); // Clear any stale browser audio queue
+
+    const utterance = new SpeechSynthesisUtterance(rawText);
+    utterance.lang = document.documentElement.lang || 'en-US';
+
+    utterance.onstart = () => {
+      updateUI('speaking');
+    };
+
+    utterance.onend = () => {
+      updateUI('idle');
+    };
+
+    utterance.onerror = (evt) => {
+      // Ignore manual stops/cancellations
+      if (evt.error !== 'interrupted' && evt.error !== 'canceled') {
+        console.error('Speech synthesis error:', evt);
+      }
+      updateUI('idle');
+    };
+
+    synth.speak(utterance);
   });
 
   if (stopBtn) {
-    stopBtn.addEventListener('click', stopSpeech);
-  }
-
-  function speakFromIndex(index) {
-    window.speechSynthesis.cancel();
-    isSpeaking = true;
-    isPaused = false;
-    updateUI('speaking');
-
-    const remainingSentences = sentences.slice(index);
-
-    remainingSentences.forEach((sentence, offset) => {
-      const sentenceIndex = index + offset;
-      const utterance = new SpeechSynthesisUtterance(sentence.trim());
-      utterance.lang = document.documentElement.lang || 'en-US';
-
-      // Update current index as each sentence starts
-      utterance.onstart = () => {
-        currentIndex = sentenceIndex;
-      };
-
-      // Reset when last sentence finishes or fails
-      if (offset === remainingSentences.length - 1) {
-        utterance.onend = resetState;
-        utterance.onerror = resetState;
-      }
-
-      window.speechSynthesis.speak(utterance);
+    stopBtn.addEventListener('click', () => {
+      synth.cancel();
+      updateUI('idle');
     });
-  }
-
-  function pauseSpeech() {
-    window.speechSynthesis.cancel(); // Clears audio queue cleanly
-    isSpeaking = false;
-    isPaused = true;
-    updateUI('paused');
-  }
-
-  function stopSpeech() {
-    window.speechSynthesis.cancel();
-    resetState();
-  }
-
-  function resetState() {
-    sentences = [];
-    currentIndex = 0;
-    isSpeaking = false;
-    isPaused = false;
-    updateUI('idle');
   }
 
   function updateUI(state) {
