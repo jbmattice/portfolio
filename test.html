@@ -937,10 +937,8 @@ I help teams make their digital experiences usable for everyone, not just compli
   if (!readBtn || !('speechSynthesis' in window)) return;
 
   const synth = window.speechSynthesis;
-  let currentUtterance = null;
   let availableVoices = [];
 
-  // Populate voices (Chromium populates voices asynchronously)
   function loadVoices() {
     availableVoices = synth.getVoices();
   }
@@ -967,36 +965,41 @@ I help teams make their digital experiences usable for everyone, not just compli
     // 3. Start Reading
     const targetContainer = document.querySelector('main') || document.body;
     
-    // Build synchronized text map
-    const { fullText, nodeMap } = buildTextMap(targetContainer);
-    if (!fullText.trim()) return;
+    // Split target text into sentences for mobile reliability
+    const sentences = getSentenceNodes(targetContainer);
+    if (!sentences.length) return;
 
-    synth.cancel();
+    if (synth.speaking || synth.paused) {
+      synth.cancel();
+    }
 
-    currentUtterance = new SpeechSynthesisUtterance(fullText);
+    // Queue each sentence
+    sentences.forEach((item, index) => {
+      const utterance = new SpeechSynthesisUtterance(item.text);
+      assignBestVoice(utterance);
 
-    // --- DYNAMIC LANGUAGE & VOICE ASSIGNMENT ---
-    assignBestVoice(currentUtterance);
-
-    // --- WORD HIGHLIGHTING LOGIC ---
-    currentUtterance.onboundary = (event) => {
-      if (event.name === 'word' && 'highlights' in CSS) {
-        const charIndex = event.charIndex;
-        const wordLength = getWordLength(fullText, charIndex);
-        
-        const range = createExactRange(nodeMap, charIndex, wordLength);
-        if (range) {
-          const highlight = new Highlight(range);
-          CSS.highlights.set('speech-word', highlight);
+      // --- STRATEGY A: Word-Level Highlighting (Desktop / iPad / Android) ---
+      utterance.onboundary = (event) => {
+        if (event.name === 'word') {
+          const wordLength = getWordLength(item.text, event.charIndex);
+          highlightRange(item.node, event.charIndex, wordLength);
         }
+      };
+
+      // --- STRATEGY B: Sentence-Level Highlighting (iPhone Fallback) ---
+      utterance.onstart = () => {
+        if (index === 0) updateUI('speaking');
+        // Highlight the entire current sentence when it starts reading
+        highlightRange(item.node, 0, item.text.length);
+      };
+
+      if (index === sentences.length - 1) {
+        utterance.onend = resetState;
+        utterance.onerror = resetState;
       }
-    };
 
-    currentUtterance.onstart = () => updateUI('speaking');
-    currentUtterance.onend = resetState;
-    currentUtterance.onerror = resetState;
-
-    synth.speak(currentUtterance);
+      synth.speak(utterance);
+    });
   });
 
   if (stopBtn) {
@@ -1007,37 +1010,45 @@ I help teams make their digital experiences usable for everyone, not just compli
   }
 
   function resetState() {
-    if ('highlights' in CSS) CSS.highlights.delete('speech-word');
+    clearHighlight();
     updateUI('idle');
   }
 
-  // --- HELPER: Matches current <html lang="..."> tag to an installed OS voice ---
-  function assignBestVoice(utterance) {
-    // Detect current page language (Chrome Translate updates the <html> lang attribute)
-    const pageLang = document.documentElement.lang || 'en-US';
-    utterance.lang = pageLang;
+  // --- HIGHLIGHT RENDERER (CSS API with Selection Fallback) ---
+  function highlightRange(node, startOffset, length) {
+    const range = document.createRange();
+    const endOffset = Math.min(node.nodeValue.length, startOffset + length);
+    
+    try {
+      range.setStart(node, startOffset);
+      range.setEnd(node, endOffset);
 
-    if (!availableVoices.length) {
-      availableVoices = synth.getVoices();
-    }
-
-    const baseLang = pageLang.split('-')[0].toLowerCase(); // e.g., 'es' from 'es-ES' or 'es'
-
-    // 1. Look for an exact language match (e.g. 'es-ES')
-    // 2. Fall back to any voice matching the base language (e.g. 'es-MX', 'es-US')
-    const matchedVoice = availableVoices.find(v => v.lang.replace('_', '-').toLowerCase() === pageLang.toLowerCase())
-                      || availableVoices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(baseLang));
-
-    if (matchedVoice) {
-      utterance.voice = matchedVoice;
+      if ('highlights' in CSS) {
+        // Modern CSS Custom Highlight API
+        const highlight = new Highlight(range);
+        CSS.highlights.set('speech-word', highlight);
+      } else {
+        // Fallback for older mobile devices using native selection
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    } catch (e) {
+      // Ignore DOM range boundary offset mismatches
     }
   }
 
-  // --- HELPER 1: Synchronize DOM Text Nodes to Speech String ---
-  function buildTextMap(container) {
-    const nodeMap = [];
-    let fullText = '';
+  function clearHighlight() {
+    if ('highlights' in CSS) {
+      CSS.highlights.delete('speech-word');
+    } else {
+      window.getSelection().removeAllRanges();
+    }
+  }
 
+  // --- HELPER: Extract Sentence Text Nodes ---
+  function getSentenceNodes(container) {
+    const items = [];
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) => {
         if (!node.nodeValue.trim() || node.parentElement.closest('script, style, [aria-hidden="true"]')) {
@@ -1049,59 +1060,35 @@ I help teams make their digital experiences usable for everyone, not just compli
 
     let node;
     while ((node = walker.nextNode())) {
-      const text = node.nodeValue;
-      const start = fullText.length;
-      fullText += text + ' ';
-      
-      nodeMap.push({
+      items.push({
         node: node,
-        start: start,
-        end: start + text.length
+        text: node.nodeValue.trim()
       });
     }
-
-    return { fullText, nodeMap };
+    return items;
   }
 
-  // --- HELPER 2: Reliable Word Length Calculation ---
   function getWordLength(text, charIndex) {
     const substring = text.slice(charIndex);
     const match = substring.match(/^[^\s.,!?;:()"'«»]+/);
     return match ? match[0].length : 1;
   }
 
-  // --- HELPER 3: Precise DOM Range Mapping ---
-  function createExactRange(nodeMap, charIndex, length) {
-    const targetEnd = charIndex + length;
-    let startNode = null, startOffset = 0;
-    let endNode = null, endOffset = 0;
+  function assignBestVoice(utterance) {
+    const pageLang = document.documentElement.lang || 'en-US';
+    utterance.lang = pageLang;
 
-    for (const item of nodeMap) {
-      if (!startNode && charIndex >= item.start && charIndex < item.end) {
-        startNode = item.node;
-        startOffset = charIndex - item.start;
-      }
-      if (targetEnd > item.start && targetEnd <= item.end) {
-        endNode = item.node;
-        endOffset = targetEnd - item.start;
-        break;
-      }
+    if (!availableVoices.length) {
+      availableVoices = synth.getVoices();
     }
 
-    if (startNode && !endNode) {
-      const item = nodeMap.find(i => i.node === startNode);
-      endNode = startNode;
-      endOffset = Math.min(item.node.nodeValue.length, startOffset + length);
-    }
+    const baseLang = pageLang.split('-')[0].toLowerCase();
+    const matchedVoice = availableVoices.find(v => v.lang.replace('_', '-').toLowerCase() === pageLang.toLowerCase())
+                      || availableVoices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(baseLang));
 
-    if (startNode && endNode) {
-      const range = document.createRange();
-      range.setStart(startNode, startOffset);
-      range.setEnd(endNode, endOffset);
-      return range;
+    if (matchedVoice) {
+      utterance.voice = matchedVoice;
     }
-
-    return null;
   }
 
   function updateUI(state) {
