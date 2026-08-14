@@ -426,6 +426,12 @@ summary {
   color: #ffffff;
   border-color: #c81e1e;
 }
+	  /* Highlights active spoken word without altering layout */
+::highlight(speech-word) {
+  background-color: #fef08a; /* Soft yellow highlight */
+  color: #000000;
+  border-radius: 3px;
+}
   </style>
 </head>
 <body>
@@ -909,56 +915,52 @@ I help teams make their digital experiences usable for everyone, not just compli
    document.addEventListener('DOMContentLoaded', () => {
   const readBtn = document.querySelector('#read-aloud-btn');
   const stopBtn = document.querySelector('#stop-speech-btn');
-  if (!readBtn) return;
-
-  if (!('speechSynthesis' in window)) {
-    readBtn.style.display = 'none';
-    if (stopBtn) stopBtn.style.display = 'none';
-    return;
-  }
+  if (!readBtn || !('speechSynthesis' in window)) return;
 
   const synth = window.speechSynthesis;
 
   readBtn.addEventListener('click', () => {
-    // 1. Currently speaking -> PAUSE
     if (synth.speaking && !synth.paused) {
       synth.pause();
       updateUI('paused');
       return;
     }
 
-    // 2. Currently paused -> RESUME
     if (synth.paused) {
       synth.resume();
       updateUI('speaking');
       return;
     }
 
-    // 3. Idle -> START READING
-    const targetElement = document.querySelector('main') || document.body;
-    const rawText = targetElement.innerText.trim();
+    // Target the main container
+    const targetContainer = document.querySelector('main') || document.body;
+    const rawText = targetContainer.innerText.trim();
     if (!rawText) return;
 
-    synth.cancel(); // Clear any stale browser audio queue
+    synth.cancel();
 
     const utterance = new SpeechSynthesisUtterance(rawText);
     utterance.lang = document.documentElement.lang || 'en-US';
 
-    utterance.onstart = () => {
-      updateUI('speaking');
-    };
+    // --- WORD HIGHLIGHTING LOGIC ---
+    utterance.onboundary = (event) => {
+      // Check for word boundary and CSS Highlight support
+      if (event.name === 'word' && 'highlights' in CSS) {
+        const charIndex = event.charIndex;
+        // Fallback length calculation if event.charLength is undefined
+        const charLength = event.charLength || getWordLength(rawText, charIndex);
 
-    utterance.onend = () => {
-      updateUI('idle');
-    };
-
-    utterance.onerror = (evt) => {
-      // Ignore manual stops/cancellations
-      if (evt.error !== 'interrupted' && evt.error !== 'canceled') {
-        console.error('Speech synthesis error:', evt);
+        const range = createRangeFromIndex(targetContainer, charIndex, charLength);
+        if (range) {
+          const highlight = new Highlight(range);
+          CSS.highlights.set('speech-word', highlight);
+        }
       }
-      updateUI('idle');
     };
+
+    utterance.onstart = () => updateUI('speaking');
+    utterance.onend = resetState;
+    utterance.onerror = resetState;
 
     synth.speak(utterance);
   });
@@ -966,31 +968,70 @@ I help teams make their digital experiences usable for everyone, not just compli
   if (stopBtn) {
     stopBtn.addEventListener('click', () => {
       synth.cancel();
-      updateUI('idle');
+      resetState();
     });
   }
 
-  function updateUI(state) {
-  const icon = readBtn.querySelector('.btn-icon');
-  const text = readBtn.querySelector('.btn-text');
-
-  if (state === 'speaking') {
-    readBtn.setAttribute('aria-pressed', 'true');
-    text.textContent = 'Pause';
-    icon.innerHTML = '<i class="ph ph-pause" aria-hidden="true"></i>';
-    if (stopBtn) stopBtn.style.display = 'inline-flex';
-  } else if (state === 'paused') {
-    readBtn.setAttribute('aria-pressed', 'false');
-    text.textContent = 'Resume';
-    icon.innerHTML = '<i class="ph ph-play" aria-hidden="true"></i>';
-    if (stopBtn) stopBtn.style.display = 'inline-flex';
-  } else { // idle
-    readBtn.setAttribute('aria-pressed', 'false');
-    text.textContent = 'Listen';
-    icon.innerHTML = '<i class="ph ph-play" aria-hidden="true"></i>';
-    if (stopBtn) stopBtn.style.display = 'none';
+  function resetState() {
+    // Clear highlight overlay
+    if ('highlights' in CSS) CSS.highlights.delete('speech-word');
+    updateUI('idle');
   }
-}
+
+  // Helper: Finds exact DOM Text Node & creates range based on character offset
+  function createRangeFromIndex(container, startOffset, length) {
+    const range = document.createRange();
+    let currentOffset = 0;
+    let startFound = false;
+
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    let node;
+
+    while ((node = walker.nextNode())) {
+      const nodeLength = node.nodeValue.length;
+
+      if (!startFound && currentOffset + nodeLength >= startOffset) {
+        range.setStart(node, startOffset - currentOffset);
+        startFound = true;
+      }
+
+      if (startFound && currentOffset + nodeLength >= startOffset + length) {
+        range.setEnd(node, (startOffset + length) - currentOffset);
+        return range;
+      }
+
+      currentOffset += nodeLength;
+    }
+    return null;
+  }
+
+  // Fallback word length parser
+  function getWordLength(text, start) {
+    const match = text.slice(start).match(/^\w+/);
+    return match ? match[0].length : 1;
+  }
+
+  function updateUI(state) {
+    const icon = readBtn.querySelector('.btn-icon');
+    const text = readBtn.querySelector('.btn-text');
+
+    if (state === 'speaking') {
+      readBtn.setAttribute('aria-pressed', 'true');
+      text.textContent = 'Pause';
+      icon.innerHTML = '<i class="ph ph-pause"></i>';
+      if (stopBtn) stopBtn.style.display = 'inline-flex';
+    } else if (state === 'paused') {
+      readBtn.setAttribute('aria-pressed', 'false');
+      text.textContent = 'Resume';
+      icon.innerHTML = '<i class="ph ph-play"></i>';
+      if (stopBtn) stopBtn.style.display = 'inline-flex';
+    } else {
+      readBtn.setAttribute('aria-pressed', 'false');
+      text.textContent = 'Listen';
+      icon.innerHTML = '<i class="ph ph-play"></i>';
+      if (stopBtn) stopBtn.style.display = 'none';
+    }
+  }
 });  </script>
 </body>
 </html>
