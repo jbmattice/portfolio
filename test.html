@@ -917,46 +917,52 @@ I help teams make their digital experiences usable for everyone, not just compli
       }
     });
 
-	  /* speak button */
+	  /*---------------------- speak button ------------------------------- */
    document.addEventListener('DOMContentLoaded', () => {
   const readBtn = document.querySelector('#read-aloud-btn');
   const stopBtn = document.querySelector('#stop-speech-btn');
   if (!readBtn || !('speechSynthesis' in window)) return;
 
   const synth = window.speechSynthesis;
+  let currentUtterance = null;
 
   readBtn.addEventListener('click', () => {
+    // 1. Pause
     if (synth.speaking && !synth.paused) {
       synth.pause();
       updateUI('paused');
       return;
     }
 
+    // 2. Resume
     if (synth.paused) {
       synth.resume();
       updateUI('speaking');
       return;
     }
 
-    // Target the main container
+    // 3. Start Reading
     const targetContainer = document.querySelector('main') || document.body;
-    const rawText = targetContainer.innerText.trim();
-    if (!rawText) return;
+    
+    // Build a synchronized map between DOM text nodes and the synthesized text
+    const { fullText, nodeMap } = buildTextMap(targetContainer);
+    if (!fullText.trim()) return;
 
-    synth.cancel();
+    synth.cancel(); // Reset any active queue
 
-    const utterance = new SpeechSynthesisUtterance(rawText);
-    utterance.lang = document.documentElement.lang || 'en-US';
+    currentUtterance = new SpeechSynthesisUtterance(fullText);
+    currentUtterance.lang = document.documentElement.lang || 'en-US';
 
-    // --- WORD HIGHLIGHTING LOGIC ---
-    utterance.onboundary = (event) => {
-      // Check for word boundary and CSS Highlight support
+    // --- ACCURATE WORD HIGHLIGHTING ---
+    currentUtterance.onboundary = (event) => {
       if (event.name === 'word' && 'highlights' in CSS) {
         const charIndex = event.charIndex;
-        // Fallback length calculation if event.charLength is undefined
-        const charLength = event.charLength || getWordLength(rawText, charIndex);
-
-        const range = createRangeFromIndex(targetContainer, charIndex, charLength);
+        
+        // Calculate true word length via Regex (bypasses browser charLength bug)
+        const wordLength = getWordLength(fullText, charIndex);
+        
+        // Create exact range across DOM text nodes
+        const range = createExactRange(nodeMap, charIndex, wordLength);
         if (range) {
           const highlight = new Highlight(range);
           CSS.highlights.set('speech-word', highlight);
@@ -964,11 +970,11 @@ I help teams make their digital experiences usable for everyone, not just compli
       }
     };
 
-    utterance.onstart = () => updateUI('speaking');
-    utterance.onend = resetState;
-    utterance.onerror = resetState;
+    currentUtterance.onstart = () => updateUI('speaking');
+    currentUtterance.onend = resetState;
+    currentUtterance.onerror = resetState;
 
-    synth.speak(utterance);
+    synth.speak(currentUtterance);
   });
 
   if (stopBtn) {
@@ -979,42 +985,84 @@ I help teams make their digital experiences usable for everyone, not just compli
   }
 
   function resetState() {
-    // Clear highlight overlay
     if ('highlights' in CSS) CSS.highlights.delete('speech-word');
     updateUI('idle');
   }
 
-  // Helper: Finds exact DOM Text Node & creates range based on character offset
-  function createRangeFromIndex(container, startOffset, length) {
-    const range = document.createRange();
-    let currentOffset = 0;
-    let startFound = false;
+  // --- HELPER 1: Synchronize DOM Text Nodes to Speech String ---
+  function buildTextMap(container) {
+    const nodeMap = [];
+    let fullText = '';
 
-    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        // Skip hidden or empty whitespace nodes
+        if (!node.nodeValue.trim() || node.parentElement.closest('script, style, [aria-hidden="true"]')) {
+          return NodeFilter.FILTER_SKIP;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
     let node;
-
     while ((node = walker.nextNode())) {
-      const nodeLength = node.nodeValue.length;
-
-      if (!startFound && currentOffset + nodeLength >= startOffset) {
-        range.setStart(node, startOffset - currentOffset);
-        startFound = true;
-      }
-
-      if (startFound && currentOffset + nodeLength >= startOffset + length) {
-        range.setEnd(node, (startOffset + length) - currentOffset);
-        return range;
-      }
-
-      currentOffset += nodeLength;
+      const text = node.nodeValue;
+      const start = fullText.length;
+      fullText += text + ' '; // Append space between text nodes for natural speech pauses
+      
+      nodeMap.push({
+        node: node,
+        start: start,
+        end: start + text.length
+      });
     }
-    return null;
+
+    return { fullText, nodeMap };
   }
 
-  // Fallback word length parser
-  function getWordLength(text, start) {
-    const match = text.slice(start).match(/^\w+/);
+  // --- HELPER 2: Reliable Word Length Calculation ---
+  function getWordLength(text, charIndex) {
+    const substring = text.slice(charIndex);
+    // Match until punctuation or space boundary
+    const match = substring.match(/^[^\s.,!?;:()"'«»]+/);
     return match ? match[0].length : 1;
+  }
+
+  // --- HELPER 3: Precise DOM Range Mapping ---
+  function createExactRange(nodeMap, charIndex, length) {
+    const targetEnd = charIndex + length;
+    let startNode = null, startOffset = 0;
+    let endNode = null, endOffset = 0;
+
+    for (const item of nodeMap) {
+      // Locate Start Node
+      if (!startNode && charIndex >= item.start && charIndex < item.end) {
+        startNode = item.node;
+        startOffset = charIndex - item.start;
+      }
+      // Locate End Node
+      if (targetEnd > item.start && targetEnd <= item.end) {
+        endNode = item.node;
+        endOffset = targetEnd - item.start;
+        break;
+      }
+    }
+
+    // Fallback if word ends right at a text node boundary
+    if (startNode && !endNode) {
+      const item = nodeMap.find(i => i.node === startNode);
+      endNode = startNode;
+      endOffset = Math.min(item.node.nodeValue.length, startOffset + length);
+    }
+
+    if (startNode && endNode) {
+      const range = document.createRange();
+      range.setStart(startNode, startOffset);
+      range.setEnd(endNode, endOffset);
+      return range;
+    }
+
+    return null;
   }
 
   function updateUI(state) {
@@ -1038,6 +1086,6 @@ I help teams make their digital experiences usable for everyone, not just compli
       if (stopBtn) stopBtn.style.display = 'none';
     }
   }
-});  </script>
+}); </script>
 </body>
 </html>
