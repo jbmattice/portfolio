@@ -925,13 +925,23 @@ I help teams make their digital experiences usable for everyone, not just compli
     });
 
 	  /*---------------------- speak button ------------------------------- */
-   document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
   const readBtn = document.querySelector('#read-aloud-btn');
   const stopBtn = document.querySelector('#stop-speech-btn');
   if (!readBtn || !('speechSynthesis' in window)) return;
 
   const synth = window.speechSynthesis;
   let currentUtterance = null;
+  let availableVoices = [];
+
+  // Populate voices (Chromium populates voices asynchronously)
+  function loadVoices() {
+    availableVoices = synth.getVoices();
+  }
+  loadVoices();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
 
   readBtn.addEventListener('click', () => {
     // 1. Pause
@@ -951,24 +961,23 @@ I help teams make their digital experiences usable for everyone, not just compli
     // 3. Start Reading
     const targetContainer = document.querySelector('main') || document.body;
     
-    // Build a synchronized map between DOM text nodes and the synthesized text
+    // Build synchronized text map
     const { fullText, nodeMap } = buildTextMap(targetContainer);
     if (!fullText.trim()) return;
 
-    synth.cancel(); // Reset any active queue
+    synth.cancel();
 
     currentUtterance = new SpeechSynthesisUtterance(fullText);
-    currentUtterance.lang = document.documentElement.lang || 'en-US';
 
-    // --- ACCURATE WORD HIGHLIGHTING ---
+    // --- DYNAMIC LANGUAGE & VOICE ASSIGNMENT ---
+    assignBestVoice(currentUtterance);
+
+    // --- WORD HIGHLIGHTING LOGIC ---
     currentUtterance.onboundary = (event) => {
       if (event.name === 'word' && 'highlights' in CSS) {
         const charIndex = event.charIndex;
-        
-        // Calculate true word length via Regex (bypasses browser charLength bug)
         const wordLength = getWordLength(fullText, charIndex);
         
-        // Create exact range across DOM text nodes
         const range = createExactRange(nodeMap, charIndex, wordLength);
         if (range) {
           const highlight = new Highlight(range);
@@ -996,6 +1005,28 @@ I help teams make their digital experiences usable for everyone, not just compli
     updateUI('idle');
   }
 
+  // --- HELPER: Matches current <html lang="..."> tag to an installed OS voice ---
+  function assignBestVoice(utterance) {
+    // Detect current page language (Chrome Translate updates the <html> lang attribute)
+    const pageLang = document.documentElement.lang || 'en-US';
+    utterance.lang = pageLang;
+
+    if (!availableVoices.length) {
+      availableVoices = synth.getVoices();
+    }
+
+    const baseLang = pageLang.split('-')[0].toLowerCase(); // e.g., 'es' from 'es-ES' or 'es'
+
+    // 1. Look for an exact language match (e.g. 'es-ES')
+    // 2. Fall back to any voice matching the base language (e.g. 'es-MX', 'es-US')
+    const matchedVoice = availableVoices.find(v => v.lang.replace('_', '-').toLowerCase() === pageLang.toLowerCase())
+                      || availableVoices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(baseLang));
+
+    if (matchedVoice) {
+      utterance.voice = matchedVoice;
+    }
+  }
+
   // --- HELPER 1: Synchronize DOM Text Nodes to Speech String ---
   function buildTextMap(container) {
     const nodeMap = [];
@@ -1003,7 +1034,6 @@ I help teams make their digital experiences usable for everyone, not just compli
 
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) => {
-        // Skip hidden or empty whitespace nodes
         if (!node.nodeValue.trim() || node.parentElement.closest('script, style, [aria-hidden="true"]')) {
           return NodeFilter.FILTER_SKIP;
         }
@@ -1015,7 +1045,7 @@ I help teams make their digital experiences usable for everyone, not just compli
     while ((node = walker.nextNode())) {
       const text = node.nodeValue;
       const start = fullText.length;
-      fullText += text + ' '; // Append space between text nodes for natural speech pauses
+      fullText += text + ' ';
       
       nodeMap.push({
         node: node,
@@ -1030,7 +1060,6 @@ I help teams make their digital experiences usable for everyone, not just compli
   // --- HELPER 2: Reliable Word Length Calculation ---
   function getWordLength(text, charIndex) {
     const substring = text.slice(charIndex);
-    // Match until punctuation or space boundary
     const match = substring.match(/^[^\s.,!?;:()"'«»]+/);
     return match ? match[0].length : 1;
   }
@@ -1042,12 +1071,10 @@ I help teams make their digital experiences usable for everyone, not just compli
     let endNode = null, endOffset = 0;
 
     for (const item of nodeMap) {
-      // Locate Start Node
       if (!startNode && charIndex >= item.start && charIndex < item.end) {
         startNode = item.node;
         startOffset = charIndex - item.start;
       }
-      // Locate End Node
       if (targetEnd > item.start && targetEnd <= item.end) {
         endNode = item.node;
         endOffset = targetEnd - item.start;
@@ -1055,7 +1082,6 @@ I help teams make their digital experiences usable for everyone, not just compli
       }
     }
 
-    // Fallback if word ends right at a text node boundary
     if (startNode && !endNode) {
       const item = nodeMap.find(i => i.node === startNode);
       endNode = startNode;
