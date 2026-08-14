@@ -936,6 +936,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const synth = window.speechSynthesis;
   let availableVoices = [];
+  
+  // Mobile fallback state trackers
+  let currentWordMap = [];
+  let timerId = null;
+  let hasNativeBoundary = false;
+  let startTime = 0;
+  let pausedElapsedTime = 0;
 
   function loadVoices() {
     availableVoices = synth.getVoices();
@@ -949,6 +956,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Pause
     if (synth.speaking && !synth.paused) {
       synth.pause();
+      if (timerId) clearInterval(timerId);
+      pausedElapsedTime = performance.now() - startTime;
       updateUI('paused');
       return;
     }
@@ -957,40 +966,73 @@ document.addEventListener('DOMContentLoaded', () => {
     if (synth.paused) {
       synth.resume();
       updateUI('speaking');
+      // Resume mobile estimated timer if native boundaries aren't available
+      if (!hasNativeBoundary) {
+        startTime = performance.now() - pausedElapsedTime;
+        startFallbackTimer();
+      }
       return;
     }
 
     // 3. Start Reading
     const targetContainer = document.querySelector('main') || document.body;
-    
-    // Extract words and build 1:1 token map to raw DOM nodes
     const { fullText, wordMap } = buildWordMap(targetContainer);
     if (!fullText.trim()) return;
 
     if (synth.speaking || synth.paused) {
       synth.cancel();
+      resetState();
     }
+
+    currentWordMap = wordMap;
+    hasNativeBoundary = false;
+    pausedElapsedTime = 0;
 
     const utterance = new SpeechSynthesisUtterance(fullText);
     assignBestVoice(utterance);
 
-    // --- ACCURATE WORD HIGHLIGHTING ---
+    // --- STRATEGY A: Native Boundary (Laptop / Desktop) ---
     utterance.onboundary = (event) => {
-      // Find the active word token based on speech character position
-      const charIndex = event.charIndex;
-      const matchedToken = wordMap.find(
-        (item) => charIndex >= item.spokenStart && charIndex < item.spokenEnd
-      ) || wordMap.find((item) => item.spokenStart >= charIndex);
+      if (event.name === 'word') {
+        hasNativeBoundary = true; // Disable mobile timer
+        if (timerId) clearInterval(timerId);
 
-      if (matchedToken) {
-        highlightToken(matchedToken);
+        const charIndex = event.charIndex;
+        const matchedToken = currentWordMap.find(
+          (item) => charIndex >= item.spokenStart && charIndex < item.spokenEnd
+        ) || currentWordMap.find((item) => item.spokenStart >= charIndex);
+
+        if (matchedToken) {
+          highlightToken(matchedToken);
+        }
       }
     };
 
-    utterance.onstart = () => updateUI('speaking');
+    // --- STRATEGY B: Speech Cadence Timer (Mobile Phones) ---
+    utterance.onstart = () => {
+      updateUI('speaking');
+      
+      const speechRate = utterance.rate || 1.0;
+      let cumulativeTime = 0;
+
+      // Calculate estimated duration for every word based on length & punctuation
+      currentWordMap.forEach((item) => {
+        let charFactor = Math.max(160, (item.word.length / 5) * 260);
+        
+        if (/[.!?]/.test(item.word)) charFactor += 260; // Extra pause for sentence ends
+        else if (/[,;:—]/.test(item.word)) charFactor += 120; // Pause for commas
+
+        item.estimatedDuration = charFactor / speechRate;
+        item.startTimeMs = cumulativeTime;
+        cumulativeTime += item.estimatedDuration;
+      });
+
+      startTime = performance.now();
+      startFallbackTimer();
+    };
+
     utterance.onend = resetState;
     utterance.onerror = (evt) => {
-      // Ignore manual stops/interruption errors
       if (evt.error !== 'interrupted' && evt.error !== 'canceled') {
         console.error('Speech synthesis error:', evt);
       }
@@ -1007,19 +1049,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function startFallbackTimer() {
+    if (timerId) clearInterval(timerId);
+    
+    // Check timing every 40ms
+    timerId = setInterval(() => {
+      if (hasNativeBoundary) {
+        clearInterval(timerId);
+        return;
+      }
+
+      const elapsed = performance.now() - startTime;
+      const activeToken = currentWordMap.find(
+        (item) => elapsed >= item.startTimeMs && elapsed < (item.startTimeMs + item.estimatedDuration)
+      );
+
+      if (activeToken) {
+        highlightToken(activeToken);
+      }
+    }, 40);
+  }
+
   function resetState() {
+    if (timerId) clearInterval(timerId);
     clearHighlight();
     updateUI('idle');
   }
 
-  // --- TOKEN MAPPER: Fixes HTML whitespace drift & partial highlights ---
+  // --- TOKEN MAPPER ---
   function buildWordMap(container) {
     const wordMap = [];
     let fullText = '';
 
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) => {
-        // Exclude hidden nodes, scripts, styles, and interactive audio controls
         if (
           !node.nodeValue.trim() ||
           node.parentElement.closest('script, style, [aria-hidden="true"], #read-aloud-btn, #stop-speech-btn')
@@ -1033,7 +1096,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let node;
     while ((node = walker.nextNode())) {
       const rawText = node.nodeValue;
-      const regex = /\S+/g; // Match every non-whitespace word token
+      const regex = /\S+/g;
       let match;
 
       while ((match = regex.exec(rawText)) !== null) {
@@ -1042,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const rawEnd = rawStart + word.length;
 
         const spokenStart = fullText.length;
-        fullText += word + ' '; // Append clean space between words
+        fullText += word + ' ';
         const spokenEnd = spokenStart + word.length + 1;
 
         wordMap.push({
@@ -1059,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return { fullText: fullText.trim(), wordMap };
   }
 
-  // --- HIGHLIGHT RENDERER (Supports CSS Custom Highlight + Native Selection Fallback) ---
+  // --- HIGHLIGHT RENDERER ---
   function highlightToken(token) {
     try {
       const range = document.createRange();
@@ -1067,17 +1130,15 @@ document.addEventListener('DOMContentLoaded', () => {
       range.setEnd(token.node, token.rawEnd);
 
       if ('highlights' in CSS) {
-        // Modern CSS Highlight API (Laptop, iPad, Android, iOS 17.2+)
         const highlight = new Highlight(range);
         CSS.highlights.set('speech-word', highlight);
       } else {
-        // Fallback for older mobile browsers
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
       }
     } catch (e) {
-      console.error('Highlight range error:', e);
+      // Ignore boundary range offset mismatches
     }
   }
 
