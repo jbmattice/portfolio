@@ -120,6 +120,13 @@
     }
     .skip-link:focus { top: var(--space-m); }
 
+	  .gtranslate_wrapper {
+		   font-size: 1rem; }
+	  .gtranslate_wrapper:focus-visible {
+  outline: 3px solid var(--blue1);
+  outline-offset: -3px;
+}
+
     /* ==========================================================================
        3. EVERY LAYOUT PRIMITIVES
        ========================================================================== */
@@ -322,7 +329,7 @@
   
   /* 1. Ensure CTA buttons retain a physical border/outline */
   .btn, 
-  a[role="button"], .gtranslate_wrapper,
+  a[role="button"], 
   .cta-button {
     outline: 2px solid ButtonText;
     outline-offset: 1px;
