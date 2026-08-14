@@ -931,7 +931,7 @@ I help teams make their digital experiences usable for everyone, not just compli
     });
 
 	  /*---------------------- speak button ------------------------------- */
- document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const readBtn = document.querySelector('#read-aloud-btn');
   const stopBtn = document.querySelector('#stop-speech-btn');
   if (!readBtn || !('speechSynthesis' in window)) return;
@@ -965,41 +965,41 @@ I help teams make their digital experiences usable for everyone, not just compli
     // 3. Start Reading
     const targetContainer = document.querySelector('main') || document.body;
     
-    // Split target text into sentences for mobile reliability
-    const sentences = getSentenceNodes(targetContainer);
-    if (!sentences.length) return;
+    // Extract words and build 1:1 token map to raw DOM nodes
+    const { fullText, wordMap } = buildWordMap(targetContainer);
+    if (!fullText.trim()) return;
 
     if (synth.speaking || synth.paused) {
       synth.cancel();
     }
 
-    // Queue each sentence
-    sentences.forEach((item, index) => {
-      const utterance = new SpeechSynthesisUtterance(item.text);
-      assignBestVoice(utterance);
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    assignBestVoice(utterance);
 
-      // --- STRATEGY A: Word-Level Highlighting (Desktop / iPad / Android) ---
-      utterance.onboundary = (event) => {
-        if (event.name === 'word') {
-          const wordLength = getWordLength(item.text, event.charIndex);
-          highlightRange(item.node, event.charIndex, wordLength);
-        }
-      };
+    // --- ACCURATE WORD HIGHLIGHTING ---
+    utterance.onboundary = (event) => {
+      // Find the active word token based on speech character position
+      const charIndex = event.charIndex;
+      const matchedToken = wordMap.find(
+        (item) => charIndex >= item.spokenStart && charIndex < item.spokenEnd
+      ) || wordMap.find((item) => item.spokenStart >= charIndex);
 
-      // --- STRATEGY B: Sentence-Level Highlighting (iPhone Fallback) ---
-      utterance.onstart = () => {
-        if (index === 0) updateUI('speaking');
-        // Highlight the entire current sentence when it starts reading
-        highlightRange(item.node, 0, item.text.length);
-      };
-
-      if (index === sentences.length - 1) {
-        utterance.onend = resetState;
-        utterance.onerror = resetState;
+      if (matchedToken) {
+        highlightToken(matchedToken);
       }
+    };
 
-      synth.speak(utterance);
-    });
+    utterance.onstart = () => updateUI('speaking');
+    utterance.onend = resetState;
+    utterance.onerror = (evt) => {
+      // Ignore manual stops/interruption errors
+      if (evt.error !== 'interrupted' && evt.error !== 'canceled') {
+        console.error('Speech synthesis error:', evt);
+      }
+      resetState();
+    };
+
+    synth.speak(utterance);
   });
 
   if (stopBtn) {
@@ -1014,27 +1014,72 @@ I help teams make their digital experiences usable for everyone, not just compli
     updateUI('idle');
   }
 
-  // --- HIGHLIGHT RENDERER (CSS API with Selection Fallback) ---
-  function highlightRange(node, startOffset, length) {
-    const range = document.createRange();
-    const endOffset = Math.min(node.nodeValue.length, startOffset + length);
-    
+  // --- TOKEN MAPPER: Fixes HTML whitespace drift & partial highlights ---
+  function buildWordMap(container) {
+    const wordMap = [];
+    let fullText = '';
+
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        // Exclude hidden nodes, scripts, styles, and interactive audio controls
+        if (
+          !node.nodeValue.trim() ||
+          node.parentElement.closest('script, style, [aria-hidden="true"], #read-aloud-btn, #stop-speech-btn')
+        ) {
+          return NodeFilter.FILTER_SKIP;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    let node;
+    while ((node = walker.nextNode())) {
+      const rawText = node.nodeValue;
+      const regex = /\S+/g; // Match every non-whitespace word token
+      let match;
+
+      while ((match = regex.exec(rawText)) !== null) {
+        const word = match[0];
+        const rawStart = match.index;
+        const rawEnd = rawStart + word.length;
+
+        const spokenStart = fullText.length;
+        fullText += word + ' '; // Append clean space between words
+        const spokenEnd = spokenStart + word.length + 1;
+
+        wordMap.push({
+          node: node,
+          word: word,
+          rawStart: rawStart,
+          rawEnd: rawEnd,
+          spokenStart: spokenStart,
+          spokenEnd: spokenEnd
+        });
+      }
+    }
+
+    return { fullText: fullText.trim(), wordMap };
+  }
+
+  // --- HIGHLIGHT RENDERER (Supports CSS Custom Highlight + Native Selection Fallback) ---
+  function highlightToken(token) {
     try {
-      range.setStart(node, startOffset);
-      range.setEnd(node, endOffset);
+      const range = document.createRange();
+      range.setStart(token.node, token.rawStart);
+      range.setEnd(token.node, token.rawEnd);
 
       if ('highlights' in CSS) {
-        // Modern CSS Custom Highlight API
+        // Modern CSS Highlight API (Laptop, iPad, Android, iOS 17.2+)
         const highlight = new Highlight(range);
         CSS.highlights.set('speech-word', highlight);
       } else {
-        // Fallback for older mobile devices using native selection
+        // Fallback for older mobile browsers
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
       }
     } catch (e) {
-      // Ignore DOM range boundary offset mismatches
+      console.error('Highlight range error:', e);
     }
   }
 
@@ -1046,34 +1091,6 @@ I help teams make their digital experiences usable for everyone, not just compli
     }
   }
 
-  // --- HELPER: Extract Sentence Text Nodes ---
-  function getSentenceNodes(container) {
-    const items = [];
-    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
-      acceptNode: (node) => {
-        if (!node.nodeValue.trim() || node.parentElement.closest('script, style, [aria-hidden="true"]')) {
-          return NodeFilter.FILTER_SKIP;
-        }
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-
-    let node;
-    while ((node = walker.nextNode())) {
-      items.push({
-        node: node,
-        text: node.nodeValue.trim()
-      });
-    }
-    return items;
-  }
-
-  function getWordLength(text, charIndex) {
-    const substring = text.slice(charIndex);
-    const match = substring.match(/^[^\s.,!?;:()"'«»]+/);
-    return match ? match[0].length : 1;
-  }
-
   function assignBestVoice(utterance) {
     const pageLang = document.documentElement.lang || 'en-US';
     utterance.lang = pageLang;
@@ -1083,8 +1100,9 @@ I help teams make their digital experiences usable for everyone, not just compli
     }
 
     const baseLang = pageLang.split('-')[0].toLowerCase();
-    const matchedVoice = availableVoices.find(v => v.lang.replace('_', '-').toLowerCase() === pageLang.toLowerCase())
-                      || availableVoices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(baseLang));
+    const matchedVoice =
+      availableVoices.find((v) => v.lang.replace('_', '-').toLowerCase() === pageLang.toLowerCase()) ||
+      availableVoices.find((v) => v.lang.replace('_', '-').toLowerCase().startsWith(baseLang));
 
     if (matchedVoice) {
       utterance.voice = matchedVoice;
